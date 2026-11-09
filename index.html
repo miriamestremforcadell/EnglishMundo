@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#3f51b5">
+<meta name="description" content="EnglishMundo: actividades de inglés para practicar vocabulario, comprensión y gramática.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
 <title>EnglishMundo</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -854,6 +857,15 @@ function deleteKid(id){if(!confirm('¿Eliminar este alumno y todo su progreso?')
 function resetKid(id){if(confirm('¿Seguro? Se borrará todo el progreso de este alumno.')){var k=KIDS.filter(function(x){return x.id===id})[0];S.p[id]=newProfile(k.lvl);save();parents(id)}}
 
 home();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("./service-worker.js").catch(function (error) {
+      console.warn("No se pudo registrar el modo sin conexión:", error);
+    });
+  });
+}
 </script>
 </body>
 </html>

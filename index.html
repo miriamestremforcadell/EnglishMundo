@@ -73,7 +73,7 @@ input{font-size:28px;padding:10px;border-radius:12px;border:2px solid #cfd8dc;wi
 <div id="app"></div>
 <script>
 /* ============ CONFIG ============ */
-var KEY='englishmundo_alumnos_v1', LEARN=3, UNLOCK=0.85, EXAM_PASS=12, STICKER_EVERY=15, SESSION=10;
+var KEY='englishmundo_alumnes_v1', LEARN=3, UNLOCK=0.85, EXAM_PASS=12, STICKER_EVERY=15, SESSION=10;
 var KIDS=[];
 var AVATARS=['🦄','🐲','🐶','🐱','🦁','🐯','🐼','🐨','🐸','🐵','🐧','🐬','🦋','🐙','🦀','🦊','🐰','🐻','🐷','🦉','🐢','🚀','⭐','🌈','⚽','🎸','🎨','👑'];
 var STICKERS=['🐶','🐱','🦁','🐯','🐼','🐨','🐸','🐵','🐧','🐬','🐳','🦋','🐞','🐢','🐙','🦀','🦄','🐲','🌈','⭐','🚀','🎈','🎨','🎸','🏆','👑','💎','🍕','🍦','🎁'];
@@ -112,7 +112,7 @@ function T(id,lvl,icon,name,ex,eg,mc,or,tr){
 
 /* ---------- STARTERS ---------- */
 T("s-plural",0,"🍎","Plurales y a / an",
- "Una cosa: <b>a</b> + palabra (a dog). Si empieza por vocal (a, e, i, o, u): <b>an</b> (an apple). Varias cosas: añadimos <b>-s</b> (dogs). Para cosas que no se cuentan (bread, water): <b>some</b>. ¡Ojo con los irregulares! man → <b>men</b>, woman → <b>women</b>, child → <b>children</b>, foot → <b>feet</b>, mouse → <b>mice</b>, person → <b>people</b>, fish → <b>fish</b>.",
+ "Una cosa: <b>a</b> + palabra (a dog). Si comença per vocal (a, e, i, o, u): <b>an</b> (an apple). Per parlar de diverses coses, afegim <b>-s</b> (dogs). Per a noms incomptables (bread, water): <b>some</b>. Compte amb les formes irregulars! man → <b>men</b>, woman → <b>women</b>, child → <b>children</b>, foot → <b>feet</b>, mouse → <b>mice</b>, person → <b>people</b>, fish → <b>fish</b>.",
  [["+","an egg → three eggs","un huevo → tres huevos"],["+","a child → two children","un nen → dos nens"],["+","a mouse → four mice","un ratolí → quatre ratolins"],["+","Can I have some bread?","Em dones pa?"]],
  [["I have got ___ orange.",["an","a","two"]],["There is ___ dog in the garden.",["a","an","some"]],["I can see three ___.",["children","childs","child"]],["Look at those two ___!",["mice","mouses","mouse"]],["She has got ___ umbrella.",["an","a","two"]],["My ___ are very big.",["feet","foots","foot"]],["Can I have ___ bread, please?",["some","a","an"]],["There are five ___ in the park.",["people","person","peoples"]]],
  ["I have got an apple.","There are two women here.","The children are happy.","Can I have some water?"],
@@ -123,14 +123,14 @@ T("s-be",0,"👋","To be: am / is / are",
  [["+","I'm nine. She is my sister.","Tinc nou anys. Ella és la meva germana."],["−","They aren't at school.","No són a l’escola."],["?","Is he your brother? Yes, he is.","És el teu germà? Sí."]],
  [["My cat ___ black.",["is","are","am"]],["We ___ in the garden.",["are","is","am"]],["I ___ happy today.",["am","is","are"]],["___ you seven? Yes, I am.",["Are","Is","Am"]],["The books ___ on the table.",["are","is","am"]],["He ___ not my brother.",["is","are","am"]],["___ your mum a teacher?",["Is","Are","Am"]],["Are they your friends? Yes, they ___.",["are","is","aren't"]]],
  ["Is your sister ten?","We are in the park.","My dog isn't big.","Are you my friend?"],
- [["He is happy.","Haz la pregunta ❓","Is he happy?",["Are","Does"]],["They are at home.","Hazla negativa ➖","They aren't at home.",["isn't","not"]],["You are eight.","Haz la pregunta ❓","Are you eight?",["Is","Do"]]]);
+ [["He is happy.","Fes la pregunta ❓","Is he happy?",["Are","Does"]],["They are at home.","Posa-la en forma negativa ➖","They aren't at home.",["isn't","not"]],["You are eight.","Fes la pregunta ❓","Are you eight?",["Is","Do"]]]);
 
 T("s-pron",0,"👤","Pronombres y posesivos",
  "Quién hace algo: <b>I, you, he, she, it, we, they</b>. Después del verbo: <b>me, you, him, her, it, us, them</b>. De quién es: <b>my / mine, your / yours, his, her / hers, our / ours, their / theirs</b> y <b>'s</b> (Anna's bag). Per preguntar de quién: <b>Whose…?</b>",
  [["+","This is my bag. It's mine.","Esta es mi mochila. Es mía."],["+","That's Tom's bike.","Esa es la bici de Tom."],["?","Whose is this hat? It's hers.","De qui és aquest barret? És seu."],["+","Look at him!","Mira’l!"]],
  [["This is ___ book. It's mine.",["my","me","I"]],["Can you help ___?",["me","I","my"]],["Is this your pen? Yes, it's ___.",["mine","my","me"]],["___ is that dog? It's Sam's.",["Whose","Who","Where"]],["Look at Anna. ___ is singing.",["She","Her","Hers"]],["I like Ben. I play with ___.",["him","he","his"]],["This is my ___ ball.",["brother's","brothers","brother"]],["They are my friends. I love ___.",["them","they","their"]]],
  ["This is my sister's doll.","Whose bike is this?","It's his pen.","Give it to me."],
- [["This is my pen.","Usa mine","This pen is mine.",["my","me"]],["That is her bag.","Usa hers","That bag is hers.",["her","she"]],["the dog of Lucy","Usa 's","Lucy's dog",["Lucy","of"]]]);
+ [["This is my pen.","Fes servir mine","This pen is mine.",["my","me"]],["That is her bag.","Fes servir hers","That bag is hers.",["her","she"]],["the dog of Lucy","Fes servir 's","Lucy's dog",["Lucy","of"]]]);
 
 T("s-this",0,"👉","This, that, these, those i one",
  "A prop: <b>this</b> (un) / <b>these</b> (diversos). Lluny: <b>that</b> (un) / <b>those</b> (diversos). Per no repetir el nom fem servir <b>one</b>: I like the red <b>one</b>.",
@@ -144,42 +144,42 @@ T("s-there",0,"🏞️","There is / There are",
  [["+","There is a cat on the bed.","Hay un gato en la cama."],["+","There are two apples.","Hay dos manzanas."],["?","Is there a dog? No, there isn't.","Hi ha un gos? No."],["?","How many birds are there?","Quants ocells hi ha?"]],
  [["There ___ a ball under the chair.",["is","are","am"]],["There ___ three cats in the garden.",["are","is","am"]],["___ there a computer in your room?",["Is","Are","Have"]],["Are there any fish? Yes, there ___.",["are","is","have"]],["There ___ any bananas. Sorry!",["aren't","isn't","not"]],["How many books ___ there?",["are","is","have"]],["Is there a pen in your bag? No, there ___.",["isn't","aren't","not"]]],
  ["Is there a dog in the park?","There are four chairs.","How many cars are there?","There isn't a lamp."],
- [["There is a cake.","Haz la pregunta ❓","Is there a cake?",["Are","Has"]],["There are two boys.","Haz la pregunta ❓","Are there two boys?",["Is","Do"]],["There is a spider.","Hazla negativa ➖","There isn't a spider.",["aren't","no"]]]);
+ [["There is a cake.","Fes la pregunta ❓","Is there a cake?",["Are","Has"]],["There are two boys.","Fes la pregunta ❓","Are there two boys?",["Is","Do"]],["There is a spider.","Posa-la en forma negativa ➖","There isn't a spider.",["aren't","no"]]]);
 
 T("s-have",0,"🎁","Have got",
  "Per dir què <b>tens</b>: I / you / we / they <b>have got</b> ('ve got) · he / she / it <b>has got</b> ('s got). Negació: <b>haven't got / hasn't got</b>. Pregunta: <b>Have you got…? Has she got…?</b>",
  [["+","I've got a red bike.","Tengo una bici roja."],["+","She has got long hair.","Ella tiene el cabells largo."],["−","He hasn't got a cat.","Él no tiene gato."],["?","Have you got a pet? Yes, I have.","Tens cap animal de companyia? Sí."]],
  [["I ___ got two brothers.",["have","has","am"]],["My dog ___ got big ears.",["has","have","is"]],["___ you got a pencil?",["Have","Has","Are"]],["Has she got a sister? No, she ___.",["hasn't","haven't","isn't"]],["We ___ got a garden.",["haven't","hasn't","aren't"]],["___ your dad got a car?",["Has","Have","Is"]]],
  ["Have you got a ruler?","I have got a new kite.","She has got blue eyes.","He hasn't got a phone."],
- [["You have got a dog.","Haz la pregunta ❓","Have you got a dog?",["Has","Do"]],["She has got a bike.","Hazla negativa ➖","She hasn't got a bike.",["haven't","not"]],["I have got a hat.","Cambia a: He","He has got a hat.",["have","I"]]]);
+ [["You have got a dog.","Fes la pregunta ❓","Have you got a dog?",["Has","Do"]],["She has got a bike.","Posa-la en forma negativa ➖","She hasn't got a bike.",["haven't","not"]],["I have got a hat.","Cambia a: He","He has got a hat.",["have","I"]]]);
 
 T("s-can",0,"🤸","Can / can't",
  "Per parlar del que <b>sabes o puedes</b> hacer: <b>can</b> + verbo (¡sin -s!). Si no: <b>can't</b>. Pregunta: <b>Can you…?</b> También para pedir algo: <b>Can I have…, please?</b>",
  [["+","I can swim.","Sé nadar."],["−","Fish can't walk.","Los peces no pueden andar."],["?","Can you ride a bike? Yes, I can.","Saps anar amb bicicleta? Sí."],["?","Can I have an apple, please?","Em dones una poma, si us plau?"]],
  [["Birds ___ fly.",["can","cans","are"]],["She can ___ very well.",["sing","sings","singing"]],["___ you play the piano?",["Can","Do","Are"]],["Can he swim? No, he ___.",["can't","isn't","doesn't"]],["___ I have some water, please?",["Can","Am","Do"]],["A fish ___ climb a tree.",["can't","can","isn't"]]],
  ["Can you play tennis?","My brother can run fast.","I can't draw a horse.","Can I have a pencil, please?"],
- [["You can swim.","Haz la pregunta ❓","Can you swim?",["Do","swims"]],["He can jump.","Hazla negativa ➖","He can't jump.",["don't","jumps"]],["They can dance.","Haz la pregunta ❓","Can they dance?",["Are","dances"]]]);
+ [["You can swim.","Fes la pregunta ❓","Can you swim?",["Do","swims"]],["He can jump.","Posa-la en forma negativa ➖","He can't jump.",["don't","jumps"]],["They can dance.","Fes la pregunta ❓","Can they dance?",["Are","dances"]]]);
 
 T("s-pres",0,"🔁","Present simple: I like / he likes",
  "Per parlar del que haces <b>normalmente</b> o lo que te gusta. Con <b>he / she / it</b> el verbo lleva <b>-s</b>: she play<b>s</b>. Negativa: <b>don't / doesn't</b> + verbo. Pregunta: <b>Do you…? / Does he…?</b> (¡y el verbo sin -s!).",
  [["+","I play football on Saturday.","Juego al fútbol los sábados."],["+","She likes ice cream.","A ella le gusta el helado."],["−","He doesn't like fish.","A él no le gusta el pescado."],["?","Do you like pizza? Yes, I do.","¿Te gusta la pizza? Sí."]],
  [["My sister ___ milk.",["likes","like","liking"]],["I ___ to school by bus.",["go","goes","going"]],["___ you like apples?",["Do","Does","Are"]],["___ he play tennis?",["Does","Do","Is"]],["We ___ like snakes.",["don't","doesn't","not"]],["Tom ___ eat meat.",["doesn't","don't","isn't"]],["Does she like cats? Yes, she ___.",["does","do","is"]],["He ___ his teeth every day.",["cleans","clean","cleaning"]]],
  ["Do you like bananas?","She doesn't like rain.","My dad reads books.","Does your cat sleep a lot?"],
- [["You like cake.","Haz la pregunta ❓","Do you like cake?",["Does","likes"]],["She plays the guitar.","Haz la pregunta ❓","Does she play the guitar?",["Do","plays"]],["He eats fish.","Hazla negativa ➖","He doesn't eat fish.",["don't","eats"]],["I like football.","Cambia a: She","She likes football.",["like","I"]]]);
+ [["You like cake.","Fes la pregunta ❓","Do you like cake?",["Does","likes"]],["She plays the guitar.","Fes la pregunta ❓","Does she play the guitar?",["Do","plays"]],["He eats fish.","Posa-la en forma negativa ➖","He doesn't eat fish.",["don't","eats"]],["I like football.","Cambia a: She","She likes football.",["like","I"]]]);
 
 T("s-cont",0,"🏃","Present continuous: ahora mismo",
  "Per parlar del que està passant <b>ara mateix</b>: am / is / are + verb acabat en <b>-ing</b>. Pregunta: <b>What are you doing? Is she running?</b>",
  [["+","I'm reading a book.","Estic llegint un llibre."],["+","The dog is sleeping.","El gos està dormint."],["−","They aren't swimming.","No estan nedant."],["?","What is she doing? She's painting.","Què està fent? Està pintant."]],
  [["Look! The cat is ___.",["jumping","jump","jumps"]],["We ___ playing a game.",["are","is","am"]],["What ___ you doing?",["are","is","do"]],["She is ___ a picture.",["drawing","draws","draw"]],["He ___ sleeping, he's reading.",["isn't","aren't","don't"]],["Is the baby crying? Yes, she ___.",["is","does","are"]],["They are ___ in the sea.",["swimming","swiming","swim"]]],
  ["What are you doing?","The boy is eating an apple.","Are they playing football?","She isn't singing."],
- [["He is running.","Haz la pregunta ❓","Is he running?",["Does","Are"]],["They are dancing.","Hazla negativa ➖","They aren't dancing.",["isn't","dance"]],["I eat an apple.","Dilo en este momento (-ing)","I'm eating an apple.",["eat","is"]]]);
+ [["He is running.","Fes la pregunta ❓","Is he running?",["Does","Are"]],["They are dancing.","Posa-la en forma negativa ➖","They aren't dancing.",["isn't","dance"]],["I eat an apple.","Dilo en este momento (-ing)","I'm eating an apple.",["eat","is"]]]);
 
 T("s-qw",0,"❓","Palabras para preguntar",
  "<b>What</b> = què · <b>Who</b> = qui · <b>Where</b> = on · <b>Which</b> = quin / quina · <b>Whose</b> = de qui · <b>How</b> = com · <b>How many</b> = quants / quantes · <b>How old</b> = quants anys.",
  [["?","Where is my bag?","On és la meva motxilla?"],["?","How old are you? I'm eight.","Quants anys tens? Vuit."],["?","Who is that man? He's my uncle.","Qui és aquell home? És el meu oncle."],["?","What colour is it? It's red.","De quin color és? És vermell."]],
  [["___ is your name? My name is Ana.",["What","Who","Where"]],["___ old are you?",["How","What","Who"]],["___ is my pencil? It's in your bag.",["Where","Who","What"]],["___ is that girl? She's my cousin.",["Who","Where","How"]],["How ___ cats have you got?",["many","old","much"]],["___ hat is this? It's Mark's.",["Whose","Who","Which"]],["___ one do you want, the red or the blue?",["Which","Who","How"]],["___ colour is your bike?",["What","How","Who"]]],
  ["Where is the cat?","How old is your brother?","What colour is the car?","Who is your teacher?"],
- [["The cat is under the bed.","Pregunta dónde está (Where)","Where is the cat?",["Who","What"]],["I am nine.","Pregunta la edad","How old are you?",["many","What"]]]);
+ [["The cat is under the bed.","Pregunta on és (Where)","Where is the cat?",["Who","What"]],["I am nine.","Pregunta l’edat","How old are you?",["many","What"]]]);
 
 T("s-prep",0,"📦","Preposiciones: in, on, under…",
  "Lugar: <b>in</b> = dentro · <b>on</b> = encima · <b>under</b> = debajo · <b>behind</b> = detrás · <b>in front of</b> = delante · <b>next to</b> = al lado · <b>between</b> = entre. Tiempo: <b>in</b> the morning, <b>on</b> Monday.",
@@ -193,14 +193,14 @@ T("s-imp",0,"📢","Órdenes y Let's",
  [["+","Open the door, please.","Obre la porta, si us plau."],["−","Don't run!","No corris!"],["+","Let's play!","Juguem!"]],
  [["___ the window, please.",["Close","Closes","Closing"]],["___ touch the cake!",["Don't","Not","No"]],["___ go to the park!",["Let's","Lets","Let"]],["Please ___ down.",["sit","sits","sitting"]],["Let's ___ a picture.",["draw","draws","drawing"]],["Don't ___ in the classroom.",["shout","shouts","shouting"]]],
  ["Let's play football.","Don't eat that!","Look at the board.","Please close your books."],
- [["You run.","Dale la orden en negativo (Don't)","Don't run!",["Not","runs"]],["We go to the beach.","Usa Let's","Let's go to the beach.",["We","goes"]]]);
+ [["You run.","Dona l’ordre en forma negativa (Don't)","Don't run!",["Not","runs"]],["We go to the beach.","Fes servir Let's","Let's go to the beach.",["We","goes"]]]);
 
 T("s-like",0,"❤️","Like + -ing y would like",
  "Per parlar del que t’agrada <b>hacer</b>: <b>like / love / don't like</b> + verbo con <b>-ing</b>: I like swimming. Per demanar alguna cosa educadament: <b>I'd like</b> (I would like) + cosa, o <b>to</b> + verbo. Pregunta: <b>Would you like…?</b>",
  [["+","I like swimming.","M’agrada nedar."],["−","She doesn't like singing.","A ella no li agrada cantar."],["?","Would you like a drink? Yes, please.","Vols alguna cosa per beure? Sí, si us plau."],["+","I'd like to go to the zoo.","M’agradaria anar al zoo."]],
  [["I like ___ football.",["playing","play","plays"]],["She loves ___.",["dancing","dance","dances"]],["___ you like some cake?",["Would","Do","Are"]],["I'd like ___ a picture.",["to draw","draw","drawing"]],["Do you like ___?",["reading","read","reads"]],["Swimming ___ fun!",["is","are","am"]]],
  ["I like riding my bike.","Would you like an apple?","I'd like to play.","He loves reading comics."],
- [["I play tennis.","Usa I like + -ing","I like playing tennis.",["play","likes"]],["Do you want a drink?","Pregunta con Would","Would you like a drink?",["Do","want"]]]);
+ [["I play tennis.","Usa I like + -ing","I like playing tennis.",["play","likes"]],["Do you want a drink?","Fes la pregunta amb Would","Would you like a drink?",["Do","want"]]]);
 
 T("s-and",0,"🔗","Unir frases: and, but, or",
  "<b>and</b> = y · <b>but</b> = pero · <b>or</b> = o. Ejemplo: I like cats <b>but</b> I don't like dogs.",
@@ -210,7 +210,7 @@ T("s-and",0,"🔗","Unir frases: and, but, or",
  []);
 
 T("s-phr",0,"💬","Frases útiles de Starters",
- "Frases que salen mucho en el examen: <b>Here you are</b> (aquí tienes) · <b>Me too!</b> (¡yo también!) · <b>So do I</b> (a mí también) · <b>What a …!</b> (¡qué …!) · <b>Happy birthday!</b> · <b>What now?</b> (¿y ahora qué?).",
+ "Frases habituals de l’examen: <b>Here you are</b> (aquí tens) · <b>Me too!</b> (jo també!) · <b>So do I</b> (jo també) · <b>What a …!</b> (quin / quina …!) · <b>Happy birthday!</b> · <b>What now?</b> (i ara què?).",
  [["+","Can I have the ball? Here you are.","¿Me das la cabellsta? Aquí tienes."],["+","I love chocolate. So do I!","Me encanta el chocolate. ¡A mí también!"],["+","What a beautiful bird!","¡Qué ocell tan bonito!"],["+","Happy birthday! Thank you!","¡Feliz cumpleaños! ¡Gracias!"]],
  [["Can I have your pen? Yes, here you ___.",["are","is","go"]],["I like ice cream. ___ do I!",["So","Me","Too"]],["I'm hungry. ___ too!",["Me","I","So"]],["What ___ funny dog!",["a","an","the"]],["What ___ ugly monster!",["an","a","the"]],["It's my birthday! Happy ___!",["birthday","day","party"]]],
  ["What a big elephant!","So do I!","Here you are.","What a lovely day!"],
@@ -222,28 +222,28 @@ T("m-was",1,"⏪","Pasado: was / were",
  [["+","I was at home yesterday.","Ahir era a casa."],["+","They were happy.","Estaven contents."],["−","It wasn't cold.","No feia fred."],["?","Were you at the park? Yes, I was.","Eres al parc? Sí."]],
  [["Yesterday I ___ tired.",["was","were","am"]],["We ___ at the beach last week.",["were","was","are"]],["___ she at school on Monday?",["Was","Were","Is"]],["The film ___ very good. I didn't like it.",["wasn't","weren't","isn't"]],["Were they hungry? Yes, they ___.",["were","was","are"]],["Where ___ you yesterday?",["were","was","are"]]],
  ["I was at home yesterday.","Were you at the zoo?","It wasn't sunny.","Where was your dog?"],
- [["He is sad.","Pásala al pasado ⏪","He was sad.",["were","is"]],["They are at school.","Pásala al pasado ⏪","They were at school.",["was","are"]],["You were tired.","Haz la pregunta ❓","Were you tired?",["Was","Did"]]]);
+ [["He is sad.","Passa-la al passat ⏪","He was sad.",["were","is"]],["They are at school.","Passa-la al passat ⏪","They were at school.",["was","are"]],["You were tired.","Fes la pregunta ❓","Were you tired?",["Was","Did"]]]);
 
 T("m-past",1,"📼","Pasado regular: -ed y did",
  "Per parlar d’accions que ja han passat: verb + <b>-ed</b> (played, watched). És igual per a totes les persones. Negació: <b>didn't</b> + verb en forma normal. Pregunta: <b>Did you…?</b> + verb en forma normal.",
  [["+","I played football yesterday.","Ahir vaig jugar a futbol."],["−","She didn't watch TV.","Ella no va mirar la televisió."],["?","Did you like the film? Yes, I did.","Et va agradar la pel·lícula? Sí."]],
  [["Last Sunday we ___ a cake.",["cooked","cook","cooks"]],["She ___ to music yesterday.",["listened","listen","listens"]],["___ you play tennis last week?",["Did","Do","Were"]],["I didn't ___ my homework.",["finish","finished","finishes"]],["Did he walk to school? No, he ___.",["didn't","wasn't","doesn't"]],["They ___ in the park last summer.",["played","play","playing"]]],
  ["We watched a film last night.","Did you visit your grandma?","He didn't clean his room.","She laughed at the clown."],
- [["I play with my friends.","Pásala al pasado ⏪","I played with my friends.",["play","did"]],["You liked the cake.","Haz la pregunta ❓","Did you like the cake?",["liked","Do"]],["She watched TV.","Hazla negativa ➖","She didn't watch TV.",["watched","doesn't"]]]);
+ [["I play with my friends.","Passa-la al passat ⏪","I played with my friends.",["play","did"]],["You liked the cake.","Fes la pregunta ❓","Did you like the cake?",["liked","Do"]],["She watched TV.","Posa-la en forma negativa ➖","She didn't watch TV.",["watched","doesn't"]]]);
 
 T("m-irr",1,"🌀","Pasado irregular",
  "Alguns verbs canvien en passat y hay que aprenderlos: go → <b>went</b>, see → <b>saw</b>, eat → <b>ate</b>, have → <b>had</b>, buy → <b>bought</b>, swim → <b>swam</b>, take → <b>took</b>, come → <b>came</b>, run → <b>ran</b>, make → <b>made</b>. Con <b>didn't</b> y <b>Did…?</b> el verbo vuelve a ser normal.",
  [["+","We went to the zoo.","Vam anar al zoo."],["+","I saw a whale!","He vist una balena!"],["−","He didn't go to school.","No va anar a l’escola."],["?","Did you eat pizza? Yes, I did.","Vas menjar pizza? Sí."]],
  [["Yesterday I ___ to the cinema.",["went","goed","go"]],["We ___ a big shark at the aquarium.",["saw","seed","see"]],["She ___ a sandwich for lunch.",["ate","eated","eats"]],["Did you ___ a good holiday?",["have","had","has"]],["My dad ___ me a new bike.",["bought","buyed","buy"]],["They ___ in the sea last summer.",["swam","swimmed","swim"]],["I ___ lots of photos.",["took","taked","take"]],["We didn't ___ to the party.",["go","went","goes"]]],
  ["We went to the beach.","I ate a big ice cream.","Did you see the monkeys?","My friend came to my house."],
- [["I go to the park.","Pásala al pasado ⏪","I went to the park.",["go","goed"]],["She sees a dolphin.","Pásala al pasado ⏪","She saw a dolphin.",["sees","seed"]],["You went to London.","Haz la pregunta ❓","Did you go to London?",["went","Do"]]]);
+ [["I go to the park.","Passa-la al passat ⏪","I went to the park.",["go","goed"]],["She sees a dolphin.","Passa-la al passat ⏪","She saw a dolphin.",["sees","seed"]],["You went to London.","Fes la pregunta ❓","Did you go to London?",["went","Do"]]]);
 
 T("m-comp",1,"📏","Comparativos y superlativos",
  "Comparar dos: palabra corta + <b>-er than</b> (bigger than) · palabra larga: <b>more … than</b>. El que más: <b>the …-est</b> (the biggest) · <b>the most …</b>. Irregulares: good → <b>better</b> → <b>the best</b>; bad → <b>worse</b> → <b>the worst</b>.",
  [["+","An elephant is bigger than a dog.","Un elefant és més gran que un gos."],["+","This is the tallest tree in the park.","És l’arbre més alt del parc."],["+","My book is more interesting than yours.","El meu llibre és més interessant que el teu."],["+","You are my best friend.","Ets el meu millor amic."]],
  [["A car is ___ than a bike.",["faster","fast","fastest"]],["Who is the ___ in your class?",["tallest","taller","tall"]],["This film is ___ than that one.",["better","gooder","best"]],["My sister is ___ than me.",["older","old","oldest"]],["This is the ___ day of my life!",["best","better","good"]],["A whale is ___ than a fish.",["bigger","biger","biggest"]],["This book is ___ beautiful than that one.",["more","most","much"]],["Today is ___ than yesterday. It's raining!",["worse","badder","worst"]]],
  ["My dog is bigger than your cat.","She is the best singer.","Lions are stronger than monkeys.","This is the most beautiful beach."],
- [["My bag is big. Your bag is small.","Compara (-er than)","My bag is bigger than your bag.",["big","more"]],["Tom is tall. (de la clase)","Usa el superlativo","Tom is the tallest in the class.",["taller","most"]]]);
+ [["My bag is big. Your bag is small.","Compara (-er than)","My bag is bigger than your bag.",["big","more"]],["Tom is tall. (de la clase)","Fes servir el superlatiu","Tom is the tallest in the class.",["taller","most"]]]);
 
 T("m-adv",1,"🐢","Adverbios: cómo y cada cuánto",
  "Para decir <b>cómo</b> haces algo: adjetivo + <b>-ly</b> (slow → slowly, quiet → quietly). Irregulares: good → <b>well</b>, fast → <b>fast</b>. Per comparar: <b>faster, better, more slowly</b>. Per indicar la freqüència: <b>always, often, sometimes, never</b> (van abans del verb).",
@@ -257,14 +257,14 @@ T("m-must",1,"⚠️","Must / have to / had to",
  [["+","You must wear a helmet.","Debes llevar casco."],["+","She has to do her homework.","Tiene que hacer los deberes."],["−","You mustn't run here.","No debes correr aquí."],["+","Yesterday I had to clean my room.","Ayer tuve que limpiar mi cuarto."]],
  [["It's late. You ___ go to bed.",["must","mustn't","can"]],["He ___ to wear glasses.",["has","have","must"]],["You ___ touch the fire! It's hot.",["mustn't","must","have to"]],["Last week I ___ to see the doctor.",["had","have","must"]],["Do you ___ to wear a uniform?",["have","has","must"]],["We ___ be quiet in the library.",["must","mustn't","has"]]],
  ["You must wash your hands.","I have to go home now.","You mustn't eat in class.","She had to wait for the bus."],
- [["I have to study.","Pásala al pasado ⏪","I had to study.",["have","must"]],["She must help.","Usa has to","She has to help.",["have","must"]],["You have to go.","Haz la pregunta ❓","Do you have to go?",["Have","Does"]]]);
+ [["I have to study.","Passa-la al passat ⏪","I had to study.",["have","must"]],["She must help.","Fes servir has to","She has to help.",["have","must"]],["You have to go.","Fes la pregunta ❓","Do you have to go?",["Have","Does"]]]);
 
 T("m-could",1,"🙋","Could y Shall I…?",
  "<b>could</b> es el pasado de can: When I was three, I <b>could</b> swim. Negativa: <b>couldn't</b>. Para ofrecer ayuda: <b>Shall I</b> + verbo? (¿Quieres que…?).",
  [["+","When I was five, I could ride a bike.","Con cinc años sabía ir en bici."],["−","I couldn't find my shoes.","No encontraba mis sabatas."],["?","Shall I open the window?","¿Abro la ventana?"]],
  [["When she was four, she ___ read.",["could","can","cans"]],["I ___ sleep last night. It was too hot.",["couldn't","can't","don't"]],["___ I help you with your bag?",["Shall","Do","Am"]],["___ you swim when you were six?",["Could","Can","Did"]],["Shall I ___ the door for you?",["open","opens","opening"]],["Yesterday we ___ see the moon. It was beautiful.",["could","can","shall"]]],
  ["Shall I carry your bag?","I could play the piano.","He couldn't find his cat.","Could you swim last year?"],
- [["I can climb trees.","Pásala al pasado ⏪","I could climb trees.",["can","did"]],["She can't come.","Pásala al pasado ⏪","She couldn't come.",["can't","didn't"]]]);
+ [["I can climb trees.","Passa-la al passat ⏪","I could climb trees.",["can","did"]],["She can't come.","Passa-la al passat ⏪","She couldn't come.",["can't","didn't"]]]);
 
 T("m-verb",1,"➡️","Mostrabo + to / verbo + -ing",
  "Algus verbos van con <b>to</b> + verbo: want to, need to, learn to, start to, try to. Otros con <b>-ing</b>: like, love, enjoy, stop, finish, go (go swimming). Para decir <b>para qué</b>: <b>to</b> + verbo (I went to the shop <b>to buy</b> milk).",
@@ -278,7 +278,7 @@ T("m-ask",1,"🙏","Want / ask someone to… y give it to me",
  [["+","Mum wants me to tidy my room.","Mamá quiere que ordene mi cuarto."],["+","The teacher asked us to sit down.","La profe nos pidió que nos sentáramos."],["+","Give the ball to Tom.","Dale la cabellsta a Tom."],["?","Can you send me a photo?","¿Me envías una foto?"]],
  [["I want you ___ me.",["to help","help","helping"]],["She asked ___ to close the door.",["me","I","my"]],["Dad wants ___ to come home.",["us","we","our"]],["Give the book ___ your sister.",["to","for","at"]],["The teacher asked them ___ quiet.",["to be","be","being"]],["Can you give ___ the salt, please?",["me","I","to me"]]],
  ["My mum wants me to read.","Give the pen to me.","He asked her to dance.","Show me your picture."],
- [["\"Help me!\" said Mum.","Empieza: Mum asked me…","Mum asked me to help her.",["helping","she"]],["Give me the cup.","Usa to me","Give the cup to me.",["for","I"]]]);
+ [["\"Help me!\" said Mum.","Comença així: Mum asked me…","Mum asked me to help her.",["helping","she"]],["Give me the cup.","Fes servir to me","Give the cup to me.",["for","I"]]]);
 
 T("m-rel",1,"🔍","Who / which / where para describir",
  "Para dar más información: personas → <b>who</b> · cosas y animales → <b>which</b> · lugares → <b>where</b>.",
@@ -314,14 +314,14 @@ T("f-pcont",2,"🎬","Past continuous: estaba haciendo",
  [["+","I was reading at eight o'clock.","A las vuit estaba leyendo."],["+","We were playing when it started to rain.","Estábamos jugando cuando empezó a llover."],["?","What were you doing yesterday at five?","¿Qué hacías ayer a las cinc?"]],
  [["I ___ watching TV when Dad came home.",["was","were","did"]],["They ___ swimming at ten o'clock.",["were","was","are"]],["What ___ you doing when I called?",["were","was","did"]],["She was ___ a cake when the cat jumped on the table.",["making","make","made"]],["It was raining ___ we went out.",["when","because","but"]],["We ___ sleeping. We were reading.",["weren't","wasn't","didn't"]]],
  ["I was eating when you called.","What were you doing?","They were playing in the garden.","She was reading a book."],
- [["I read a book.","Usa was + -ing","I was reading a book.",["were","read"]],["They were dancing.","Haz la pregunta ❓","Were they dancing?",["Was","Did"]]]);
+ [["I read a book.","Fes servir was + -ing","I was reading a book.",["were","read"]],["They were dancing.","Fes la pregunta ❓","Were they dancing?",["Was","Did"]]]);
 
 T("f-pp",2,"🌍","Present perfect: ever / never",
  "Para <b>experiencias</b> de tu vida: <b>have / has</b> + participio (been, seen, eaten, visited). <b>Have you ever…?</b> = ¿Alguna vez has…? <b>never</b> = nunca.",
  [["?","Have you ever been to London?","¿Has estado alguna vez en Londres?"],["+","I have seen a whale.","He visto una ballena."],["−","She has never eaten sushi.","Nunca ha comido sushi."]],
  [["Have you ever ___ a dolphin?",["seen","saw","see"]],["She ___ been to Paris.",["has","have","is"]],["I have never ___ a horse.",["ridden","rode","ride"]],["___ you ever eaten snails?",["Have","Has","Did"]],["We have ___ Italy two times.",["visited","visit","visiting"]],["He has ___ been on a plane.",["never","ever","yet"]]],
  ["Have you ever been to Spain?","I have never seen a ghost.","She has visited London.","Has he ever eaten a snail?"],
- [["You have seen a lion.","Pregunta con ever","Have you ever seen a lion?",["Did","saw"]],["I have been to Rome.","Hazla con never","I have never been to Rome.",["ever","was"]]]);
+ [["You have seen a lion.","Fes la pregunta amb ever","Have you ever seen a lion?",["Did","saw"]],["I have been to Rome.","Posa-la amb never","I have never been to Rome.",["ever","was"]]]);
 
 T("f-yet",2,"⏳","Already, yet, just, since, for",
  "Amb el present perfect: <b>just</b> = acabo de · <b>already</b> = ja · <b>yet</b> = encara / ja (al final, en preguntes i negacions). <b>since</b> + moment (since 2020, since Monday) · <b>for</b> + període de temps (for two years).",
@@ -443,7 +443,7 @@ function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&am
 var NEW={av:'🦄',lvl:0};
 function addStudent(back){
  NEW.back=back||'home';
- render('<div class="top"><button class="btn" onclick="'+(NEW.back==='parents'?'parents()':'home()')+'">⬅ Torna</button></div><div class="card"><h2>➕ Nuevo alumno</h2>'+
+ render('<div class="top"><button class="btn" onclick="'+(NEW.back==='parents'?'parents()':'home()')+'">⬅ Torna</button></div><div class="card"><h2>➕ Nuevo alumne</h2>'+
   '<p class="big">Nom</p><input id="nm" type="text" maxlength="20" style="width:100%;text-align:left" placeholder="Nom de l’alumne">'+
   '<p class="big">Tria un dibuix</p><div class="stickers" id="avs">'+AVATARS.map(function(a){return '<div class="btn" style="padding:6px;'+(a===NEW.av?'background:#ffe0b2':'')+'" onclick="NEW.av=\''+a+'\';addStudentRefresh()">'+a+'</div>'}).join('')+'</div>'+
   '<p class="big">A quin nivell comença?</p><div class="row" style="justify-content:flex-start" id="lvs">'+LEVELS.map(function(l,i){return '<button class="btn'+(i===NEW.lvl?' primary':'')+'" onclick="NEW.lvl='+i+';addStudentRefresh()">'+l.icon+' '+l.name+'</button>'}).join('')+'</div>'+
@@ -451,7 +451,7 @@ function addStudent(back){
   '<div class="center"><button class="btn green" style="font-size:24px" onclick="saveStudent()">✔ Guardar</button></div><p id="nerr" style="color:#c62828" class="center"></p></div>');
 }
 function addStudentRefresh(){var v=$('#nm').value;addStudent(NEW.back);$('#nm').value=v}
-function saveStudent(){var n=$('#nm').value.trim();if(!n){$('#nerr').textContent='Escribe un nombre';return}
+function saveStudent(){var n=$('#nm').value.trim();if(!n){$('#nerr').textContent='Escriu un nom';return}
  var id='a'+Date.now().toString(36);KIDS.push({id:id,name:n,av:NEW.av,lvl:NEW.lvl});S.p[id]=newProfile(NEW.lvl);save();
  var bk=NEW.back;NEW={av:'🦄',lvl:0};if(bk==='parents')parents();else home()}
 function pick(id){cur=id;map()}
@@ -465,15 +465,15 @@ function map(){
  var pend=GLIST.filter(function(t){return pendingT(p,t)}).length;
  var revTxt='';for(var ri=0;ri<li;ri++){var rp=prog(p,LEVELS[ri].items);if(rp.pct<UNLOCK)revTxt+='<br>🔁 repaso de vocabulari de <b>'+LEVELS[ri].name+'</b> ('+Math.round(rp.pct*100)+'% de 85%)'}
  var goal;
- if(p.done)goal='🏆 <b>¡Has superado Flyers!</b> Sigue practicando para el examen de verdad.';
- else if(canExam)goal='🎉 <b>¡Ya puedes hacer el examen'+(next?' para pasar a '+next.name:' final de Flyers')+'!</b>';
- else goal='Para '+(next?'pasar a <b>'+next.icon+' '+next.name+'</b>':'aprobar <b>Flyers</b>')+' te faltan:'+(need?'<br>📚 <b>'+need+'</b> palabras de '+L.name:'')+(gneed?'<br>📘 <b>'+gneed+'</b> temas de gramática de '+L.name+' con 🥈':'')+revTxt+(rgp?'<br>📌 <b>'+rgp+'</b> temas de gramática de repaso con 🥈':'')+'<br>🏆 y aprobar el examen.';
+ if(p.done)goal='🏆 <b>¡Has superado Flyers!</b> Sigue practicando per a l’examen oficial.';
+ else if(canExam)goal='🎉 <b>Ja pots fer l’examen'+(next?' per passar a '+next.name:' final de Flyers')+'!</b>';
+ else goal='Para '+(next?'pasar a <b>'+next.icon+' '+next.name+'</b>':'aprobar <b>Flyers</b>')+' et falten:'+(need?'<br>📚 <b>'+need+'</b> palabras de '+L.name:'')+(gneed?'<br>📘 <b>'+gneed+'</b> temes de gramàtica de '+L.name+' amb 🥈':'')+revTxt+(rgp?'<br>📌 <b>'+rgp+'</b> temes de gramàtica de repaso amb 🥈':'')+'<br>🏆 i aprovar l’examen.';
  var path='<div class="path">'+LEVELS.map(function(l,i){var c=(i<li||(i===li&&p.done))?'done':(i===li?'now':'');var rv=i<li&&(prog(p,l.items).pct<UNLOCK||topicsOf(i).some(function(t){return gOf(p,t.id).medal<2}));if(rv)c='';return '<span class="step '+c+'">'+(rv?'🔁 ':(c==='done'?'✅ ':(i>li?'🔒 ':'')))+l.icon+' '+l.name+'</span>'}).join('<span>➜</span>')+'</div>';
  var isl=L.units.map(function(U){var up=prog(p,U.items);var crown=up.l===up.t?'👑 ':'';
   return '<button class="btn island" onclick="practice(\''+U.id+'\')"><span class="ic">'+U.icon+'</span><span class="nm">'+crown+U.name+'</span>'+bar(up.pct,1)+'<span class="muted" style="font-size:14px">'+up.l+' / '+up.t+'</span></button>'}).join('');
  render(header()+
  '<div class="card">'+path+'<h2 style="margin-top:12px">'+L.icon+' Nivell '+L.name+'</h2>'+bar(pr.pct)+
- '<p class="muted" style="margin:6px 0">📚 Paraules: <b>'+pr.l+'</b> de <b>'+pr.t+'</b> (el examen se abre al 85%) · 📘 Gramàtica: <b>'+(gt-gneed)+'</b> de <b>'+gt+'</b> temes amb 🥈</p><p class="big" style="margin:8px 0">'+goal+'</p>'+
+ '<p class="muted" style="margin:6px 0">📚 Paraules: <b>'+pr.l+'</b> de <b>'+pr.t+'</b> (l’examen es desbloqueja amb un 85%) · 📘 Gramàtica: <b>'+(gt-gneed)+'</b> de <b>'+gt+'</b> temes amb 🥈</p><p class="big" style="margin:8px 0">'+goal+'</p>'+
  '<div class="row" style="margin-top:12px"><button class="btn primary" onclick="practice()">▶ Jugar</button>'+
  '<button class="btn blue" onclick="grammarHome()">📘 Gramàtica'+(pend?' <span style="background:#ff9800;border-radius:10px;padding:0 8px">📌 '+pend+'</span>':'')+'</button>'+
  '<button class="btn" onclick="toLearn()">📋 Lo que me falta</button>'+
@@ -486,9 +486,9 @@ function toLearn(){
  REG=[];var p=P(),L=LEVELS[p.level],pr=prog(p,L.items);
  var need=Math.max(0,Math.ceil(pr.t*UNLOCK)-pr.l);
  var html=header()+'<div class="card"><button class="btn" onclick="map()">⬅ Torna</button><h2 style="margin-top:12px">📋 Lo que tengo que aprender para pasar '+L.name+'</h2>'+bar(pr.pct)+
-  '<p class="big">'+(need>0?'Te faltan <b>'+need+'</b> para abrir el examen.':'Ja pots fer l’examen! 🎉')+'</p>'+
-  '<p class="muted">🟩 apresa · 🟨 casi · ⬜ todavía no. Toca una palabra para oírla.</p></div>';
- html+='<div class="card"><h3>📘 Gramàtica de '+L.name+' <span class="muted" style="font-size:16px">('+gramDone(p,p.level)+'/'+topicsOf(p.level).length+' con 🥈)</span></h3><p class="muted">Et calen al menos 🥈 en cada tema. Toca un tema para estudiarlo.</p><div class="words">'+
+  '<p class="big">'+(need>0?'Et falten <b>'+need+'</b> per desbloquejar l’examen.':'Ja pots fer l’examen! 🎉')+'</p>'+
+  '<p class="muted">🟩 apresa · 🟨 gairebé apresa · ⬜ encara no apresa. Toca una paraula per escoltar-la.</p></div>';
+ html+='<div class="card"><h3>📘 Gramàtica de '+L.name+' <span class="muted" style="font-size:16px">('+gramDone(p,p.level)+'/'+topicsOf(p.level).length+' amb 🥈)</span></h3><p class="muted">Et calen al menos 🥈 en cada tema. Toca un tema para estudiarlo.</p><div class="words">'+
   topicsOf(p.level).map(function(t){var m=gOf(p,t.id).medal;return '<button class="wchip '+(m>=2?'l':(m>0?'p':''))+'" onclick="topic(\''+t.id+'\')">'+t.icon+' '+t.name+' '+medalStr(m)+'</button>'}).join('')+'</div>';
  var pl=GLIST.filter(function(t){return t.lvl<p.level&&pendingT(p,t)});
  if(pl.length)html+='<h3 style="margin-top:14px">📌 Repàs pendent de niveles anteriores</h3><div class="words">'+pl.map(function(t){return '<button class="wchip p" onclick="topic(\''+t.id+'\')">'+t.icon+' '+t.name+'</button>'}).join('')+'</div>';
@@ -551,7 +551,7 @@ function cq(){return SES.qs[SES.i]}
 
 function renderQ(){
  LOCK=false;var q=cq(),it=q.it,n=SES.qs.length;
- var label={exam:'🏆 Examen',place:'🔎 Prueba',gdiag:'🔎 Prueba gramática',gram:'📘',gmix:'🔀'}[SES.kind]||'';
+ var label={exam:'🏆 Examen',place:'🔎 Prova',gdiag:'🔎 Prova de gramàtica',gram:'📘',gmix:'🔀'}[SES.kind]||'';
  var top='<div class="top"><button class="btn" onclick="quitSes()">✖</button><div style="flex:1;margin:0 12px">'+bar(SES.i/n)+'</div><span class="pill">'+label+' '+(SES.i+1)+'/'+n+'</span></div>';
  var title={listen:'Escolta i toca el dibuix',pic:'Com es diu en anglès?',def:'Llegeix i tria la paraula',spell:'Escriu la paraula',yesno:'És correcte?',gram:'Tria la paraula que falta',gtf:'És correcte o incorrecte?',es2en:'Com es diu en anglès?',en2es:'Què vol dir?',listen2es:'Escolta: què vol dir?',order:'Ordena la frase',trans:'Transforma la frase'}[q.mode];
  var b='';
@@ -742,7 +742,7 @@ function grammarHome(){
  if(pend.length)h+='<div class="card" style="background:#fff8e1"><h3>📌 Repàs pendent</h3><p class="muted">Temes que encara no domines. Comença per aquí!</p><div class="words">'+
   pend.map(function(t){return '<button class="wchip p" onclick="topic(\''+t.id+'\')">'+t.icon+' '+t.name+' <span class="muted">('+LEVELS[t.lvl].name+')</span></button>'}).join('')+'</div></div>';
  LEVELS.forEach(function(L,li){var ts=topicsOf(li);
-  h+='<div class="card"><h3>'+L.icon+' '+L.name+' <span class="muted" style="font-size:16px">'+gramDone(p,li)+'/'+ts.length+' con 🥈</span></h3>'+
+  h+='<div class="card"><h3>'+L.icon+' '+L.name+' <span class="muted" style="font-size:16px">'+gramDone(p,li)+'/'+ts.length+' amb 🥈</span></h3>'+
    (li<p.level?'<p class="muted">🔁 Repàs: si sacas 8 de 8 en el ejercicio 1, ¡ganas 🥈 directamente!</p>':'')+
    '<div class="islands">'+ts.map(function(t,i){var g=gOf(p,t.id);
     return '<button class="btn island" onclick="topic(\''+t.id+'\')"><span class="ic">'+t.icon+'</span><span class="nm">'+(i+1)+'. '+t.name+'</span><span style="font-size:22px">'+medalStr(g.medal)+'</span>'+
@@ -845,7 +845,7 @@ function parents(only){
   (function(){var gw=p.gw||{},ks=Object.keys(gw).filter(function(k){return GT[k]}).sort(function(a,b){return gw[b]-gw[a]}).slice(0,6);return '<p><b>Temes amb més errors:</b> '+(ks.length?ks.map(function(k){return GT[k].name+' ×'+gw[k]}).join(', '):'—')+'</p>'})()+
   '<h3>Paraules amb més errors</h3><div class="words">'+(weak.length?weak.map(function(id){var it=ITEMS[id];return '<span class="wchip p">'+(it.kind==='gram'?it.q.replace('___',it.a):it.w)+' ×'+p.wrong[id]+'</span>'}).join(''):'<span class="muted">Encara cap</span>')+'</div>'+
   '<h3>Historial</h3><div class="muted" style="font-size:15px">'+(p.history.slice(-8).reverse().map(function(h){return h.d+' · '+h.t+(h.n?' · '+h.sc+'/'+h.n:'')+(h.res?' · encerts per nivell: '+h.res.join(' / ')+' de 8':'')+(h.pass===true?' ✅':h.pass===false?' ❌':'')}).join('<br>')||'—')+'</div>'+
-  '<h3>Configuració</h3><p class="muted">Nivell actual: '+L.name+'</p><div class="row" style="justify-content:flex-start">'+LEVELS.map(function(l,i){return '<button class="btn" style="font-size:16px" onclick="setLevel(\''+k.id+'\','+i+')">Poner en '+l.name+'</button>'}).join('')+
+  '<h3>Configuració</h3><p class="muted">Nivell actual: '+L.name+'</p><div class="row" style="justify-content:flex-start">'+LEVELS.map(function(l,i){return '<button class="btn" style="font-size:16px" onclick="setLevel(\''+k.id+'\','+i+')">Assigna el nivell '+l.name+'</button>'}).join('')+
   '<button class="btn red" style="font-size:16px" onclick="resetKid(\''+k.id+'\')">Esborra progreso</button><button class="btn" style="font-size:16px" onclick="renameKid(\''+k.id+'\')">✏️ Canvia el nom</button><button class="btn red" style="font-size:16px" onclick="deleteKid(\''+k.id+'\')">🗑️ Elimina l’alumne</button></div></div>';
  });
  html+='<p class="muted center">El progrés es desa en aquest navegador i dispositiu. No esborris les dades del navegador.</p>';

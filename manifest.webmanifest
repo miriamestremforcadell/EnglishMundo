@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "EnglishMundo",
+  "short_name": "EnglishMundo",
+  "description": "Actividades de inglés para practicar vocabulario, comprensión y gramática.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#eaf8ff",
+  "theme_color": "#3f51b5",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

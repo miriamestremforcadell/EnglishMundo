@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#3f51b5">
+<title>EnglishMundo</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(#bfe9ff,#eaf8ff) fixed;color:#263238;min-height:100vh}
+#app{max-width:900px;margin:0 auto;padding:16px}
+h1,h2,h3{margin:.3em 0}
+.btn{border:0;border-radius:18px;padding:14px 20px;font-size:20px;font-weight:700;background:#fff;box-shadow:0 4px 0 rgba(0,0,0,.15);cursor:pointer;color:inherit;font-family:inherit}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+.primary{background:#ff9800;color:#fff}
+.green{background:#43a047;color:#fff}
+.red{background:#ef5350;color:#fff}
+.blue{background:#3f51b5;color:#fff}
+.card{background:#fff;border-radius:22px;padding:18px;box-shadow:0 4px 12px rgba(0,0,0,.08);margin-bottom:14px}
+.top{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+.hud{display:flex;gap:8px;align-items:center;font-size:20px;font-weight:700;flex-wrap:wrap}
+.pill{background:#fff;border-radius:20px;padding:6px 14px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.profiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.prof{font-size:28px;padding:28px 10px;text-align:center;width:100%}
+.prof .av{font-size:64px;display:block}
+.bar{height:22px;background:#e0e0e0;border-radius:11px;overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,#66bb6a,#43a047);border-radius:11px;transition:width .4s}
+.bar.sm{height:12px}
+.islands{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.island{text-align:center;padding:14px 10px;width:100%}
+.island .ic{font-size:46px;display:block}
+.island .nm{font-size:18px;display:block;margin:4px 0 8px}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.q{text-align:center}
+.qpic{font-size:110px;line-height:1.15;margin:8px 0}
+.sw{display:inline-block;width:110px;height:110px;border-radius:50%;border:4px solid #cfd8dc;vertical-align:middle}
+.opt .sw{width:64px;height:64px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.opt{font-size:26px;padding:16px 8px;min-height:84px}
+.opt.big{font-size:60px;padding:8px}
+.opt.ok{background:#66bb6a !important;color:#fff}
+.opt.bad{background:#ef5350 !important;color:#fff}
+.tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0}
+.tile{width:58px;height:62px;font-size:30px;padding:0}
+.tile.used{opacity:.25}
+.slot{min-height:66px;font-size:42px;letter-spacing:6px;border-bottom:4px dashed #90a4ae;margin:10px auto;max-width:520px;font-weight:700}
+.words{display:flex;flex-wrap:wrap;gap:8px}
+.wchip{padding:8px 12px;border-radius:14px;background:#eceff1;font-size:18px;border:0;font-family:inherit;cursor:pointer}
+.wchip.l{background:#c8e6c9}
+.wchip.p{background:#fff59d}
+.center{text-align:center}
+.big{font-size:24px}
+.muted{color:#78909c}
+.fb{font-size:24px;font-weight:700;min-height:36px;margin-top:12px}
+.speak{font-size:40px;padding:10px 28px}
+.stickers{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px;font-size:46px;text-align:center}
+.path{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-weight:700}
+.step{padding:8px 14px;border-radius:16px;background:#eceff1}
+.step.done{background:#c8e6c9}
+.step.now{background:#ff9800;color:#fff}
+table{width:100%;border-collapse:collapse}
+td,th{padding:6px;border-bottom:1px solid #eee;text-align:left;font-size:16px}
+input{font-size:28px;padding:10px;border-radius:12px;border:2px solid #cfd8dc;width:140px;text-align:center}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+.pop{animation:pop .4s}
+@media (max-width:520px){.qpic{font-size:84px}.opt{font-size:22px}.prof .av{font-size:64px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ============ CONFIG ============ */
+var KEY='englishmundo_alumnos_v1', LEARN=3, UNLOCK=0.85, EXAM_PASS=12, STICKER_EVERY=15, SESSION=10;
+var KIDS=[];
+var AVATARS=['🦄','🐲','🐶','🐱','🦁','🐯','🐼','🐨','🐸','🐵','🐧','🐬','🦋','🐙','🦀','🦊','🐰','🐻','🐷','🦉','🐢','🚀','⭐','🌈','⚽','🎸','🎨','👑'];
+var STICKERS=['🐶','🐱','🦁','🐯','🐼','🐨','🐸','🐵','🐧','🐬','🐳','🦋','🐞','🐢','🐙','🦀','🦄','🐲','🌈','⭐','🚀','🎈','🎨','🎸','🏆','👑','💎','🍕','🍦','🎁'];
+var PRAISE=['¡Muy bien! 🎉','¡Genial! ⭐','¡Perfecto! 👏','¡Excelente! 🌟','¡Bravo! 🎈','Great job! 🏆'];
+var SKILL={listen:'Escuchar',listen2es:'Escuchar y entender',es2en:'Del español al inglés',en2es:'Del inglés al español',pic:'Vocabulario (dibujo)',def:'Leer definiciones',spell:'Deletrear',yesno:'Verdadero / falso',gram:'Gramática: elegir',gtf:'Gramática: ¿bien o mal?',order:'Gramática: ordenar frases',trans:'Gramática: transformar frases'};
+var STAGE_N={1:8,2:6,3:8}, STAGE_NEED={1:7,2:5,3:7};
+
+/* ============ CONTENT (vocabulario YLE) ============ */
+var LEVELS=[
+{id:"starters",name:"Starters",icon:"\ud83c\udf31",units:[{"id": "s-an1", "name": "Animals 1", "icon": "🐾", "words": [["animal", "", "", "animal"], ["bird", "🐦", "", "pájaro"], ["bear", "🐻", "", "oso"], ["bee", "🐝", "", "abeja"], ["cow", "🐮", "", "vaca"], ["crocodile", "🐊", "", "cocodrilo"], ["cat", "🐱", "", "gato"], ["chicken", "🐔", "", "pollo, gallina"], ["donkey", "", "", "burro"], ["dog", "🐶", "", "perro"], ["duck", "🦆", "", "pato"], ["elephant", "🐘", "", "elefante"], ["fish", "🐟", "", "pez, pescado"], ["frog", "🐸", "", "rana"], ["giraffe", "", "", "jirafa"]]}, {"id": "s-an2", "name": "Animals 2", "icon": "🐾", "words": [["goat", "🐐", "", "cabra"], ["hippo", "", "", "hipopótamo"], ["horse", "🐴", "", "caballo"], ["jellyfish", "", "", "medusa"], ["lizard", "🦎", "", "lagarto"], ["monkey", "🐵", "", "mono"], ["mouse", "🐭", "", "ratón"], ["polar bear", "", "", "oso polar"], ["pet", "", "", "mascota"], ["spider", "🕷️", "", "araña"], ["snake", "🐍", "", "serpiente"], ["sheep", "🐑", "", "oveja"], ["tail", "", "", "cola (de animal)"], ["tiger", "🐯", "", "tigre"], ["zebra", "", "", "cebra"]]}, {"id": "s-fa1", "name": "People & Family", "icon": "👪", "words": [["baby", "👶", "", "bebé"], ["boy", "👦", "", "niño, chico"], ["brother", "👦", "", "hermano"], ["child", "", "", "niño (children = niños)"], ["cousin", "", "", "primo, prima"], ["dad", "👨", "", "papá"], ["family", "👪", "", "familia"], ["father", "👨", "", "padre"], ["friend", "", "", "amigo"], ["grandfather", "👴", "", "abuelo"], ["grandma", "👵", "", "abuela"], ["girl", "👧", "", "niña, chica"], ["grandmother", "👵", "", "abuela"], ["grandpa", "👴", "", "abuelo"], ["kid", "", "", "niño"], ["man", "👨", "", "hombre (men = hombres)"], ["mum", "👩", "", "mamá"], ["mother", "👩", "", "madre"], ["person", "", "", "persona (people = personas)"], ["sister", "👧", "", "hermana"], ["woman", "👩", "", "mujer (women = mujeres)"]]}, {"id": "s-bo1", "name": "Body & Health", "icon": "💪", "words": [["arm", "💪", "", "brazo"], ["body", "", "", "cuerpo"], ["ear", "👂", "", "oreja"], ["eye", "👁️", "", "ojo"], ["face", "🙂", "", "cara"], ["foot", "", "", "pie (feet = pies)"], ["hair", "💇", "", "pelo"], ["head", "", "", "cabeza"], ["hand", "✋", "", "mano"], ["leg", "", "", "pierna"], ["mouth", "👄", "", "boca"], ["nose", "👃", "", "nariz"]]}, {"id": "s-cl1", "name": "Clothes", "icon": "👕", "words": [["baseball cap", "", "", "gorra"], ["boots", "👢", "", "botas"], ["clothes", "", "", "ropa"], ["dress", "👗", "", "vestido"], ["glasses", "👓", "", "gafas"], ["handbag", "👜", "", "bolso"], ["hat", "🎩", "", "sombrero"], ["jacket", "", "", "chaqueta"], ["jeans", "👖", "", "vaqueros"], ["skirt", "", "", "falda"], ["shirt", "👔", "", "camisa"], ["shoe", "👞", "", "zapato"], ["shorts", "", "", "pantalón corto"], ["sock", "", "", "calcetín"], ["trousers", "", "", "pantalones"], ["T-shirt", "👕", "", "camiseta"]]}, {"id": "s-co1", "name": "Colours & Shapes", "icon": "🎨", "words": [["black", "#212121", "", "negro"], ["blue", "#1e88e5", "", "azul"], ["brown", "#795548", "", "marrón"], ["colour", "🎨", "", "color, colorear"], ["green", "#43a047", "", "verde"], ["grey", "#9e9e9e", "", "gris"], ["pink", "#f48fb1", "", "rosa"], ["purple", "#8e24aa", "", "morado"], ["red", "#e53935", "", "rojo"], ["white", "#ffffff", "", "blanco"], ["yellow", "#fdd835", "", "amarillo"]]}, {"id": "s-num1", "name": "Numbers", "icon": "🔢", "words": [["one", "1", "", "uno"], ["two", "2", "", "dos"], ["three", "3", "", "tres"], ["four", "4", "", "cuatro"], ["five", "5", "", "cinco"], ["six", "6", "", "seis"], ["seven", "7", "", "siete"], ["eight", "8", "", "ocho"], ["nine", "9", "", "nueve"], ["ten", "10", "", "diez"], ["eleven", "11", "", "once"], ["twelve", "12", "", "doce"], ["thirteen", "13", "", "trece"], ["fourteen", "14", "", "catorce"], ["fifteen", "15", "", "quince"], ["sixteen", "16", "", "dieciséis"], ["seventeen", "17", "", "diecisiete"], ["eighteen", "18", "", "dieciocho"], ["nineteen", "19", "", "diecinueve"], ["twenty", "20", "", "veinte"]]}, {"id": "s-fo1", "name": "Food & Drink 1", "icon": "🍎", "words": [["apple", "🍎", "", "manzana"], ["bean", "", "", "judía, alubia"], ["bread", "🍞", "", "pan"], ["breakfast", "", "", "desayuno"], ["banana", "🍌", "", "plátano"], ["burger", "🍔", "", "hamburguesa"], ["cake", "🍰", "", "pastel, tarta"], ["chips", "🍟", "", "patatas fritas"], ["chocolate", "🍫", "", "chocolate"], ["coconut", "", "", "coco"], ["carrot", "🥕", "", "zanahoria"], ["dinner", "", "", "cena"], ["drink", "", "", "bebida, beber"], ["egg", "🥚", "", "huevo"], ["food", "", "", "comida"], ["fruit", "🍓", "", "fruta"], ["grape", "🍇", "", "uva"], ["ice cream", "🍦", "", "helado"], ["juice", "", "", "zumo"], ["kiwi", "🥝", "", "kiwi"], ["lemon", "🍋", "", "limón"]]}, {"id": "s-fo2", "name": "Food & Drink 2", "icon": "🍎", "words": [["lemonade", "", "", "limonada"], ["lime", "", "", "lima"], ["lunch", "", "", "comida (del mediodía)"], ["mango", "", "", "mango"], ["meat", "🍖", "", "carne"], ["meatballs", "", "", "albóndigas"], ["milk", "🥛", "", "leche"], ["orange", "🍊", "", "naranja"], ["onion", "", "", "cebolla"], ["pea", "", "", "guisante"], ["pear", "🍐", "", "pera"], ["pie", "", "", "pastel (salado o dulce), empanada"], ["pineapple", "🍍", "", "piña"], ["potato", "🥔", "", "patata"], ["rice", "🍚", "", "arroz"], ["sausage", "🌭", "", "salchicha"], ["sweet", "🍬", "", "caramelo"], ["tomato", "🍅", "", "tomate"], ["water", "💧", "", "agua"], ["watermelon", "🍉", "", "sandía"]]}, {"id": "s-ho1", "name": "Home & Things 1", "icon": "🏠", "words": [["armchair", "", "", "sillón"], ["box", "📦", "", "caja"], ["bag", "🎒", "", "bolsa, mochila"], ["bed", "🛏️", "", "cama"], ["bedroom", "", "", "dormitorio"], ["bookcase", "", "", "estantería"], ["bath", "🛁", "", "bañera, baño"], ["bathroom", "", "", "cuarto de baño"], ["camera", "📷", "You take photos with this.", "cámara"], ["cupboard", "", "", "armario"], ["computer", "💻", "", "ordenador"], ["chair", "💺", "", "silla"], ["clock", "⏰", "", "reloj (de pared)"], ["door", "🚪", "", "puerta"], ["dining room", "", "", "comedor"], ["flat", "🏢", "", "piso"], ["floor", "", "", "suelo"], ["garden", "", "", "jardín"], ["hall", "", "", "recibidor"], ["house", "🏠", "", "casa"]]}, {"id": "s-ho2", "name": "Home & Things 2", "icon": "🏠", "words": [["home", "", "", "hogar, casa"], ["keyboard", "⌨️", "", "teclado"], ["kitchen", "", "", "cocina"], ["lamp", "💡", "", "lámpara"], ["living room", "", "", "salón"], ["mat", "", "", "alfombrilla"], ["mirror", "", "", "espejo"], ["poster", "", "", "póster"], ["phone", "📱", "", "teléfono, llamar"], ["photo", "📷", "", "foto"], ["radio", "📻", "", "radio"], ["room", "", "", "habitación"], ["rug", "", "", "alfombra"], ["sofa", "🛋️", "", "sofá"], ["table", "", "", "mesa"], ["tablet", "", "", "tableta"], ["TV", "📺", "", "tele"], ["wall", "", "", "pared"], ["window", "", "", "ventana"]]}, {"id": "s-sc1", "name": "School 1", "icon": "🏫", "words": [["alphabet", "🔤", "", "abecedario"], ["answer", "", "", "respuesta, responder"], ["board", "", "", "pizarra"], ["book", "📖", "", "libro"], ["crayon", "🖍️", "", "cera de colores"], ["class", "", "", "clase"], ["cross", "❌", "", "cruz, tachar"], ["classmate", "", "", "compañero de clase"], ["classroom", "", "The room where you have lessons at school.", "aula"], ["drawing", "", "", "dibujo"], ["desk", "", "", "pupitre, escritorio"], ["example", "", "", "ejemplo"], ["English", "", "", "inglés"], ["lesson", "", "", "lección, clase"], ["line", "", "", "línea"], ["letter", "🔤", "", "letra"], ["name", "", "", "nombre"], ["number", "🔢", "", "número"]]}, {"id": "s-sc2", "name": "School 2", "icon": "🏫", "words": [["page", "📄", "", "página"], ["paint", "🎨", "", "pintura, pintar"], ["painting", "🖼️", "", "cuadro, pintura"], ["pen", "🖊️", "", "bolígrafo"], ["picture", "🖼️", "", "dibujo, foto"], ["paper", "📄", "", "papel"], ["pencil", "✏️", "", "lápiz"], ["question", "❓", "", "pregunta"], ["ruler", "📏", "", "regla"], ["rubber", "", "", "goma de borrar"], ["spell", "", "", "deletrear"], ["school", "🏫", "", "colegio"], ["story", "", "", "cuento, historia"], ["sentence", "", "", "frase"], ["tick", "✔️", "", "marcar con un tick"], ["teacher", "", "This person helps you learn at school.", "profesor"], ["word", "", "", "palabra"]]}, {"id": "s-sp1", "name": "Sports & Free time 1", "icon": "⚽", "words": [["badminton", "🏸", "", "bádminton"], ["ball", "⚽", "", "pelota"], ["balloon", "🎈", "", "globo"], ["board game", "🎲", "", "juego de mesa"], ["baseball", "⚾", "", "béisbol"], ["basketball", "🏀", "", "baloncesto"], ["bat", "🦇", "", "bate"], ["doll", "", "", "muñeca"], ["fishing", "🎣", "You try to catch fish with this hobby.", "pesca"], ["football", "⚽", "", "fútbol"], ["game", "🎮", "", "juego"], ["guitar", "🎸", "", "guitarra"], ["hobby", "", "", "afición"], ["hockey", "🏒", "", "hockey"]]}, {"id": "s-sp2", "name": "Sports & Free time 2", "icon": "⚽", "words": [["kite", "", "", "cometa"], ["music", "🎵", "", "música"], ["piano", "🎹", "", "piano"], ["robot", "🤖", "", "robot"], ["skateboarding", "", "", "patinar en monopatín"], ["sport", "", "", "deporte"], ["song", "🎵", "", "canción"], ["skateboard", "", "", "monopatín"], ["tennis racket", "🎾", "", "raqueta de tenis"], ["table tennis", "🏓", "", "ping-pong"], ["toy", "", "", "juguete"], ["teddy", "", "", "osito de peluche"], ["tennis", "🎾", "", "tenis"]]}, {"id": "s-pl1", "name": "Places", "icon": "🏙️", "words": [["beach", "🏖️", "", "playa"], ["bookshop", "", "", "librería"], ["playground", "", "", "patio de juegos"], ["park", "🏞️", "", "parque"], ["shop", "🏪", "", "tienda"], ["street", "", "", "calle"], ["zoo", "", "", "zoo"]]}, {"id": "s-tr1", "name": "Transport", "icon": "🚗", "words": [["boat", "⛵", "", "barco"], ["bus", "🚌", "", "autobús"], ["bike", "🚲", "", "bici"], ["car", "🚗", "", "coche"], ["helicopter", "🚁", "", "helicóptero"], ["lorry", "🚚", "", "camión"], ["motorbike", "🏍️", "", "moto"], ["plane", "✈️", "", "avión"], ["ship", "🚢", "", "barco"], ["train", "🚂", "", "tren"]]}, {"id": "s-na1", "name": "Nature & Weather", "icon": "⛅", "words": [["flower", "🌸", "", "flor"], ["shell", "🐚", "", "concha"], ["sand", "", "", "arena"], ["sea", "🌊", "", "mar"], ["sun", "☀️", "", "sol"], ["tree", "🌳", "", "árbol"]]}, {"id": "s-ti1", "name": "Time", "icon": "⏰", "words": [["afternoon", "", "", "tarde"], ["birthday", "🎂", "", "cumpleaños"], ["day", "", "", "día"], ["evening", "", "", "tarde-noche"], ["end", "", "", "final"], ["morning", "", "", "mañana"], ["now", "", "", "ahora"], ["night", "🌙", "", "noche"], ["today", "", "", "hoy"], ["year", "", "", "año"]]}, {"id": "s-ac1", "name": "Actions 1", "icon": "🏃", "words": [["ask", "", "", "preguntar"], ["add", "", "", "añadir, sumar"], ["be", "", "", "ser, estar"], ["bounce", "", "", "botar"], ["close", "", "", "cerrar"], ["count", "", "", "contar"], ["can", "", "", "poder, saber"], ["choose", "", "", "elegir"], ["clap", "👏", "", "aplaudir"], ["come", "", "", "venir"], ["complete", "", "", "completar"], ["catch", "", "", "coger, atrapar"], ["do", "", "", "hacer"], ["drive", "🚗", "", "conducir"], ["draw", "✏️", "", "dibujar"], ["enjoy", "", "", "disfrutar"], ["eat", "", "", "comer"], ["find", "", "", "encontrar"]]}, {"id": "s-ac2", "name": "Actions 2", "icon": "🏃", "words": [["fly", "", "", "volar"], ["go", "", "", "ir"], ["get", "", "", "conseguir, coger"], ["go to bed", "", "", "irse a la cama"], ["go to sleep", "😴", "", "dormirse"], ["give", "", "", "dar"], ["hit", "", "", "golpear"], ["have", "", "", "tener"], ["hold", "", "", "sujetar"], ["have got", "", "", "tener"], ["jump", "", "Move up into the air with your feet.", "saltar"], ["kick", "", "", "dar una patada"], ["know", "", "", "saber, conocer"], ["learn", "", "", "aprender"], ["listen", "👂", "", "escuchar"], ["look", "👀", "", "mirar"], ["live", "", "", "vivir"], ["look at", "👀", "", "mirar"]]}, {"id": "s-ac3", "name": "Actions 3", "icon": "🏃", "words": [["like", "❤️", "", "gustar"], ["love", "❤️", "", "encantar, amar"], ["make", "", "", "hacer, fabricar"], ["open", "", "", "abierto, abrir"], ["pick up", "", "", "recoger"], ["point", "👉", "", "señalar"], ["play", "", "", "jugar, tocar (un instrumento)"], ["put", "", "", "poner"], ["read", "📖", "", "leer"], ["ride", "", "", "montar (en bici, a caballo)"], ["run", "🏃", "", "correr"], ["sleep", "😴", "", "dormir"], ["stand", "", "", "estar de pie"], ["say", "", "", "decir"], ["smile", "😊", "", "sonrisa, sonreír"], ["start", "", "", "empezar"], ["stop", "🛑", "", "parar"], ["show", "", "", "enseñar, mostrar"]]}, {"id": "s-ac4", "name": "Actions 4", "icon": "🏃", "words": [["see", "👀", "", "ver"], ["sing", "🎤", "", "cantar"], ["sit", "", "", "sentarse"], ["swim", "🏊", "", "nadar"], ["take a photo", "📷", "", "hacer una foto"], ["throw", "", "", "lanzar, tirar"], ["talk", "💬", "", "hablar"], ["try", "", "", "intentar"], ["tell", "", "", "contar, decir"], ["understand", "", "", "entender"], ["walk", "🚶", "", "caminar"], ["wave", "👋", "", "saludar con la mano"], ["want", "", "", "querer"], ["wear", "", "", "llevar puesto"], ["watch", "⌚", "", "ver, reloj de pulsera"], ["write", "✍️", "", "escribir"]]}, {"id": "s-de1", "name": "Describing 1", "icon": "🔤", "words": [["angry", "😠", "How you feel when someone breaks your toy.", "enfadado"], ["beautiful", "", "", "precioso, bonito"], ["big", "", "", "grande"], ["closed", "", "", "cerrado"], ["clean", "", "", "limpio, limpiar"], ["correct", "✔️", "", "correcto"], ["dirty", "", "", "sucio"], ["double", "", "", "doble"], ["fantastic", "", "", "fantástico"], ["fun", "", "", "divertido, diversión"], ["favourite", "", "", "favorito"], ["funny", "😂", "", "gracioso"], ["good", "👍", "", "bueno"]]}, {"id": "s-de2", "name": "Describing 2", "icon": "🔤", "words": [["happy", "😀", "", "feliz, contento"], ["long", "", "", "largo"], ["nice", "", "", "bonito, agradable"], ["new", "🆕", "", "nuevo"], ["old", "", "", "viejo, mayor"], ["sad", "😞", "", "triste"], ["small", "", "", "pequeño"], ["scary", "😱", "", "que da miedo"], ["short", "", "", "corto, bajo"], ["silly", "", "", "tonto"], ["ugly", "", "", "feo"], ["young", "", "", "joven"]]}, {"id": "s-ex1", "name": "Little words 1", "icon": "💬", "words": [["alien", "👽", "", "extraterrestre"], ["again", "", "", "otra vez"], ["bye", "👋", "", "adiós"], ["cool", "😎", "", "guay"], ["don't worry", "", "", "no te preocupes"], ["goodbye", "👋", "", "adiós"], ["great", "", "", "genial"], ["hooray", "🎉", "", "¡hurra!"], ["hello", "", "", "hola"], ["here", "", "", "aquí"], ["hi", "", "", "hola"], ["let's", "", "", "vamos a…"], ["a lot", "", "", "mucho"], ["lots", "", "", "muchos"], ["me too", "", "", "yo también"], ["monster", "👹", "", "monstruo"], ["no", "", "", "no"], ["not", "", "", "no"], ["oh", "", "", "¡oh!"], ["oh dear", "", "", "¡vaya!"]]}, {"id": "s-ex2", "name": "Little words 2", "icon": "💬", "words": [["OK", "👌", "", "vale"], ["please", "🙏", "", "por favor"], ["part", "", "", "parte"], ["really", "", "", "de verdad, muy"], ["right", "", "", "bien, correcto"], ["so", "", "", "así que, pues"], ["see you", "", "", "¡hasta luego!"], ["sorry", "", "", "perdón, lo siento"], ["too", "", "", "también, demasiado"], ["thank you", "🙏", "", "gracias"], ["thing", "", "", "cosa"], ["thanks", "", "", "gracias"], ["then", "", "", "luego, entonces"], ["there", "", "", "allí"], ["very", "", "", "muy"], ["well", "", "", "bien"], ["would like", "", "", "querría, me gustaría"], ["well done", "👏", "", "¡bien hecho!"], ["wow", "😮", "", "¡guau!"], ["yes", "", "", "sí"]]}]},
+{id:"movers",name:"Movers",icon:"\ud83d\ude80",units:[{"id": "m-an1", "name": "Animals", "icon": "🐾", "words": [["cage", "", "", "jaula"], ["dolphin", "🐬", "", "delfín"], ["kangaroo", "", "", "canguro"], ["kitten", "🐱", "", "gatito"], ["lion", "🦁", "", "león"], ["panda", "🐼", "", "panda"], ["penguin", "🐧", "", "pingüino"], ["parrot", "", "", "loro"], ["puppy", "🐶", "", "cachorro"], ["rabbit", "🐰", "", "conejo"], ["shark", "🦈", "", "tiburón"], ["snail", "🐌", "", "caracol"], ["whale", "🐳", "", "ballena"]]}, {"id": "m-fa1", "name": "People & Family", "icon": "👪", "words": [["aunt", "", "", "tía"], ["age", "", "", "edad"], ["daughter", "", "", "hija"], ["granddaughter", "", "", "nieta"], ["grandparent", "", "", "abuelo/abuela"], ["grandson", "", "", "nieto"], ["grown-up", "", "", "adulto"], ["parent", "", "", "padre o madre"], ["son", "", "", "hijo"], ["uncle", "", "", "tío"]]}, {"id": "m-bo1", "name": "Body & Health", "icon": "💪", "words": [["back", "", "", "espalda"], ["beard", "", "", "barba"], ["bottom", "", "", "parte de abajo, culo"], ["blond", "", "", "rubio"], ["cough", "", "", "tos, toser"], ["curly", "", "", "rizado"], ["earache", "", "", "dolor de oídos"], ["headache", "🤕", "", "dolor de cabeza"], ["hurt", "🤕", "", "hacer daño, doler"], ["ill", "🤒", "", "enfermo"], ["moustache", "", "", "bigote"], ["neck", "", "", "cuello"], ["stomach-ache", "", "", "dolor de barriga"], ["straight", "", "", "liso, recto"], ["shoulder", "", "", "hombro"], ["sick", "🤒", "", "enfermo"], ["stomach", "", "", "barriga, estómago"], ["tooth", "", "", "diente (teeth = dientes)"], ["toothache", "", "", "dolor de muelas"], ["temperature", "🌡️", "", "fiebre, temperatura"]]}, {"id": "m-cl1", "name": "Clothes", "icon": "👕", "words": [["coat", "", "", "abrigo"], ["helmet", "⛑️", "", "casco"], ["scarf", "", "", "bufanda"], ["sweater", "", "", "jersey"], ["swimsuit", "", "", "bañador"]]}, {"id": "m-co1", "name": "Colours & Shapes", "icon": "🎨", "words": [["circle", "⭕", "", "círculo"], ["round", "⚪", "", "redondo"], ["square", "⬛", "", "cuadrado, plaza"], ["shape", "🔷", "", "forma"]]}, {"id": "m-num1", "name": "Numbers 1", "icon": "🔢", "words": [["thirty", "30", "", "treinta"], ["forty", "40", "", "cuarenta"], ["fifty", "50", "", "cincuenta"], ["sixty", "60", "", "sesenta"], ["seventy", "70", "", "setenta"], ["eighty", "80", "", "ochenta"], ["ninety", "90", "", "noventa"], ["twenty-one", "21", "", "veintiuno"], ["thirty-five", "35", "", "treinta y cinco"], ["forty-eight", "48", "", "cuarenta y ocho"], ["fifty-two", "52", "", "cincuenta y dos"], ["sixty-seven", "67", "", "sesenta y siete"], ["seventy-three", "73", "", "setenta y tres"], ["eighty-nine", "89", "", "ochenta y nueve"], ["ninety-four", "94", "", "noventa y cuatro"], ["fourth", "4th", "", "cuarto"]]}, {"id": "m-num2", "name": "Numbers 2", "icon": "🔢", "words": [["fifth", "5th", "", "quinto"], ["sixth", "6th", "", "sexto"], ["seventh", "7th", "", "séptimo"], ["eighth", "8th", "", "octavo"], ["ninth", "9th", "", "noveno"], ["tenth", "10th", "", "décimo"], ["eleventh", "11th", "", "undécimo"], ["twelfth", "12th", "", "duodécimo"], ["thirteenth", "13th", "", "decimotercero"], ["fourteenth", "14th", "", "decimocuarto"], ["fifteenth", "15th", "", "decimoquinto"], ["sixteenth", "16th", "", "decimosexto"], ["seventeenth", "17th", "", "decimoséptimo"], ["eighteenth", "18th", "", "decimoctavo"], ["nineteenth", "19th", "", "decimonoveno"], ["twentieth", "20th", "", "vigésimo"]]}, {"id": "m-fo1", "name": "Food & Drink", "icon": "🍎", "words": [["cheese", "🧀", "", "queso"], ["coffee", "☕", "", "café"], ["milkshake", "", "", "batido"], ["noodles", "🍜", "", "fideos"], ["pasta", "🍝", "", "pasta"], ["pancake", "🥞", "", "tortita, crepe"], ["picnic", "", "A meal you eat outside, for example in a park.", "pícnic"], ["salad", "🥗", "", "ensalada"], ["sandwich", "", "", "bocadillo, sándwich"], ["sauce", "", "", "salsa"], ["soup", "🍲", "", "sopa"], ["tea", "🍵", "", "té"], ["vegetable", "", "", "verdura"]]}, {"id": "m-ho1", "name": "Home & Things", "icon": "🏠", "words": [["bottle", "🍼", "", "botella"], ["balcony", "", "", "balcón"], ["bowl", "", "", "cuenco, bol"], ["basement", "", "", "sótano"], ["blanket", "", "", "manta"], ["cup", "☕", "", "taza"], ["downstairs", "", "", "abajo (en el piso de abajo)"], ["glass", "🥛", "", "vaso, cristal"], ["lift", "", "", "ascensor"], ["machine", "", "", "máquina"], ["plate", "🍽️", "", "plato"], ["roof", "", "", "tejado"], ["shower", "🚿", "", "ducha"], ["seat", "💺", "", "asiento"], ["stairs", "", "", "escaleras"], ["toothbrush", "", "", "cepillo de dientes"], ["toothpaste", "", "", "pasta de dientes"], ["towel", "", "", "toalla"], ["upstairs", "", "", "arriba (en el piso de arriba)"]]}, {"id": "m-sc1", "name": "School", "icon": "🏫", "words": [["break", "", "", "descanso, recreo"], ["homework", "", "", "deberes"], ["mistake", "❌", "", "error"], ["practice", "", "", "práctica"]]}, {"id": "m-sp1", "name": "Sports & Free time", "icon": "⚽", "words": [["band", "", "", "grupo de música"], ["comic book", "", "", "libro de cómics"], ["comic", "", "", "cómic"], ["film", "🎬", "", "película"], ["goal", "🥅", "", "gol, portería"], ["ice skates", "⛸️", "", "patines de hielo"], ["ice skating", "⛸️", "", "patinaje sobre hielo"], ["model", "", "", "maqueta, modelo"], ["net", "", "", "red"], ["player", "", "", "jugador"], ["roller skates", "", "", "patines"], ["roller skating", "", "", "patinar"], ["score", "", "", "marcar (un gol), puntuación"]]}, {"id": "m-pl1", "name": "Places 1", "icon": "🏙️", "words": [["address", "", "", "dirección"], ["building", "🏢", "", "edificio"], ["bus station", "🚏", "", "estación de autobuses"], ["bus stop", "🚏", "", "parada de autobús"], ["café", "☕", "", "cafetería"], ["car park", "🅿️", "", "aparcamiento"], ["cinema", "🎦", "", "cine"], ["circus", "🎪", "", "circo"], ["country", "", "", "país"], ["city", "🏙️", "", "ciudad"], ["centre", "", "", "centro"], ["farm", "", "", "granja"], ["funfair", "🎡", "", "feria"]]}, {"id": "m-pl2", "name": "Places 2", "icon": "🏙️", "words": [["hospital", "🏥", "", "hospital"], ["library", "📚", "", "biblioteca"], ["map", "🗺️", "It shows you where places are.", "mapa"], ["market", "", "You can buy fruit and vegetables here, often outside.", "mercado"], ["place", "", "", "lugar"], ["pool", "🏊", "", "piscina"], ["road", "🛣️", "", "carretera"], ["supermarket", "🛒", "", "supermercado"], ["swimming pool", "🏊", "", "piscina"], ["station", "🚉", "", "estación"], ["town", "", "", "pueblo, ciudad"], ["village", "", "", "pueblo, aldea"]]}, {"id": "m-tr1", "name": "Transport", "icon": "🚗", "words": [["tractor", "🚜", "", "tractor"]]}, {"id": "m-na1", "name": "Nature & Weather 1", "icon": "⛅", "words": [["cloud", "☁️", "", "nube"], ["cloudy", "☁️", "", "nublado"], ["countryside", "", "", "campo"], ["field", "", "", "campo (de cultivo)"], ["forest", "🌲", "", "bosque"], ["ground", "", "", "suelo"], ["grass", "🌱", "", "hierba"], ["ice", "", "", "hielo"], ["island", "🏝️", "", "isla"], ["jungle", "🌴", "A hot forest with lots of trees and wild animals.", "selva"], ["lake", "", "Water with land all around it.", "lago"], ["leaf", "🍃", "", "hoja (de árbol)"], ["moon", "🌙", "", "luna"], ["mountain", "⛰️", "", "montaña"]]}, {"id": "m-na2", "name": "Nature & Weather 2", "icon": "⛅", "words": [["plant", "🌱", "", "planta, plantar"], ["rock", "", "", "roca"], ["rain", "🌧️", "", "lluvia, llover"], ["river", "", "Water that moves across the land to the sea.", "río"], ["rainbow", "🌈", "", "arcoíris"], ["snow", "❄️", "", "nieve, nevar"], ["sunny", "☀️", "", "soleado"], ["sky", "", "", "cielo"], ["star", "⭐", "", "estrella"], ["weather", "⛅", "", "tiempo (atmosférico)"], ["world", "🌍", "", "mundo"], ["waterfall", "", "", "cascada"], ["wind", "🌬️", "", "viento"], ["windy", "🌬️", "", "ventoso"]]}, {"id": "m-ti1", "name": "Time", "icon": "⏰", "words": [["always", "", "", "siempre"], ["first", "🥇", "", "primero"], ["holiday", "🏖️", "", "vacaciones"], ["hundred", "💯", "", "cien"], ["last", "", "", "último"], ["never", "", "", "nunca"], ["o'clock", "🕐", "", "en punto"], ["often", "", "", "a menudo"], ["sometimes", "", "", "a veces"], ["second", "🥈", "", "segundo"], ["third", "🥉", "", "tercero"], ["week", "", "", "semana"], ["weekend", "", "Saturday and Sunday.", "fin de semana"], ["yesterday", "", "The day before today.", "ayer"]]}, {"id": "m-wo1", "name": "Jobs & Work", "icon": "👷", "words": [["clown", "🤡", "", "payaso"], ["driver", "", "", "conductor"], ["doctor", "", "This person helps you when you are ill.", "médico"], ["dentist", "", "This person looks at your teeth.", "dentista"], ["film star", "⭐", "", "estrella de cine"], ["farmer", "🚜", "This person works with animals and grows food.", "granjero"], ["nurse", "", "This person works in a hospital and helps the doctor.", "enfermero"], ["pop star", "🎤", "", "estrella del pop"], ["work", "", "", "trabajar, trabajo"]]}, {"id": "m-te1", "name": "Technology", "icon": "💻", "words": [["app", "📱", "", "aplicación (app)"], ["email", "📧", "", "correo electrónico"], ["e-book", "", "", "libro electrónico"], ["internet", "", "", "internet"], ["laptop", "💻", "", "portátil"], ["message", "💬", "", "mensaje"], ["text", "💬", "", "mensaje de texto"], ["video", "📹", "", "vídeo"], ["website", "", "", "página web"]]}, {"id": "m-ac1", "name": "Actions 1", "icon": "🏃", "words": [["bring", "", "", "traer"], ["build", "", "", "construir"], ["buy", "", "", "comprar"], ["be called", "", "", "llamarse"], ["change", "", "", "cambiar"], ["climb", "", "Go up a tree or a mountain using your hands and feet.", "trepar, escalar"], ["cook", "🍳", "", "cocinar, cocinero"], ["call", "📞", "", "llamar"], ["could", "", "", "podía, sabía (pasado de can)"], ["carry", "", "", "llevar (en brazos)"], ["cry", "😢", "", "llorar"], ["dance", "💃", "", "bailar"], ["drop", "", "", "dejar caer"], ["dream", "", "", "sueño, soñar"], ["dress up", "", "", "disfrazarse"], ["feed", "", "", "dar de comer"], ["fall", "", "", "caer"]]}, {"id": "m-ac2", "name": "Actions 2", "icon": "🏃", "words": [["fix", "🔧", "", "arreglar"], ["get dressed", "", "", "vestirse"], ["get up", "", "", "levantarse"], ["get off", "", "", "bajarse"], ["grow", "🌱", "", "crecer"], ["get on", "", "", "subirse"], ["go shopping", "🛍️", "", "ir de compras"], ["get undressed", "", "", "desvestirse"], ["have to", "", "", "tener que"], ["hop", "", "", "saltar a la pata coja"], ["help", "", "", "ayudar, ayuda"], ["hide", "", "", "esconder(se)"], ["invite", "", "", "invitar"], ["look for", "🔍", "", "buscar"], ["laugh", "😂", "", "reír(se)"], ["lose", "", "", "perder"], ["mean", "", "", "significar"]]}, {"id": "m-ac3", "name": "Actions 3", "icon": "🏃", "words": [["move", "", "", "mover(se)"], ["must", "", "", "deber, tener que"], ["need", "", "", "necesitar"], ["practise", "", "", "practicar"], ["put on", "", "", "ponerse (ropa)"], ["sail", "⛵", "", "navegar"], ["shout", "📢", "", "gritar"], ["skate", "⛸️", "", "patinar"], ["skip", "", "", "saltar a la comba"], ["send", "📤", "", "enviar"], ["take", "", "", "llevar, coger"], ["think", "💭", "", "pensar"], ["travel", "", "", "viajar"], ["teach", "", "", "enseñar"], ["wait", "⏳", "", "esperar"], ["wake up", "⏰", "", "despertarse"], ["wash", "", "", "lavar(se)"]]}, {"id": "m-de1", "name": "Describing 1", "icon": "🔤", "words": [["asleep", "😴", "", "dormido"], ["afraid", "😨", "", "asustado"], ["awake", "", "", "despierto"], ["boring", "", "", "aburrido"], ["bad", "👎", "", "malo"], ["badly", "", "", "mal"], ["best", "🏆", "", "el mejor"], ["better", "", "", "mejor"], ["brave", "", "", "valiente"], ["busy", "", "", "ocupado"], ["clever", "🤓", "", "listo"], ["careful", "", "", "cuidadoso"], ["carefully", "", "", "con cuidado"], ["cold", "⛄", "", "frío, resfriado"], ["different", "", "", "diferente"], ["dangerous", "⚠️", "", "peligroso"], ["difficult", "", "", "difícil"], ["dry", "", "", "seco, secar"]]}, {"id": "m-de2", "name": "Describing 2", "icon": "🔤", "words": [["easy", "", "", "fácil"], ["exciting", "", "", "emocionante"], ["fair", "", "", "justo, rubio"], ["famous", "", "", "famoso"], ["frightened", "😱", "How you feel when you see a ghost.", "asustado"], ["fat", "", "", "gordo"], ["hungry", "", "How you feel when you want to eat.", "hambriento"], ["huge", "", "", "enorme"], ["hot", "🔥", "", "caliente, caluroso"], ["kind", "", "", "amable"], ["loud", "🔊", "", "fuerte, ruidoso"], ["little", "", "", "pequeño, poco"], ["loudly", "📢", "", "en voz alta"], ["naughty", "😈", "", "travieso"], ["pretty", "", "", "bonito, guapo"], ["quick", "", "", "rápido"], ["quickly", "", "", "rápidamente"], ["quiet", "", "", "tranquilo, silencioso"]]}, {"id": "m-de3", "name": "Describing 3", "icon": "🔤", "words": [["quietly", "", "", "en voz baja"], ["safe", "", "", "seguro"], ["strong", "💪", "", "fuerte"], ["surprised", "😮", "How you feel when something happens that you did not expect.", "sorprendido"], ["slow", "🐢", "", "lento"], ["slowly", "🐌", "", "despacio"], ["tired", "", "", "cansado"], ["tall", "", "", "alto"], ["thin", "", "", "delgado"], ["thirsty", "", "How you feel when you want a drink.", "sediento"], ["terrible", "", "", "terrible"], ["worse", "", "", "peor"], ["worst", "", "", "el peor"], ["wrong", "❌", "", "incorrecto, equivocado"], ["wet", "💦", "", "mojado"], ["weak", "", "", "débil"]]}, {"id": "m-ex1", "name": "Little words 1", "icon": "💬", "words": [["all right", "", "", "vale, bien"], ["all", "", "", "todo, todos"], ["brilliant", "", "", "genial"], ["come on", "", "", "¡vamos!"], ["difference", "", "", "diferencia"], ["down", "⬇️", "", "abajo"], ["excuse me", "", "", "perdone"], ["fine", "", "", "bien"], ["how", "", "", "cómo"], ["how much", "", "", "cuánto"], ["how often", "", "", "con qué frecuencia"], ["idea", "💡", "", "idea"], ["inside", "", "", "dentro"], ["more", "", "", "más"], ["most", "", "", "la mayoría, el más"], ["matter", "", "", "pasar (What's the matter? = ¿Qué te pasa?)"], ["near", "", "", "cerca"], ["noise", "🔊", "", "ruido"]]}, {"id": "m-ex2", "name": "Little words 2", "icon": "💬", "words": [["on", "", "", "encendido, sobre"], ["out", "", "", "fuera"], ["off", "", "", "apagado"], ["only", "", "", "solo"], ["outside", "", "", "fuera"], ["pair", "", "", "par"], ["present", "🎁", "", "regalo"], ["party", "🎉", "", "fiesta"], ["pirate", "", "", "pirata"], ["shopping", "🛍️", "", "compras"], ["shall", "", "", "¿…? (para ofrecer: Shall I…?)"], ["ticket", "🎫", "", "billete, entrada"], ["treasure", "💎", "", "tesoro"], ["top", "", "", "parte de arriba"], ["trip", "", "", "excursión, viaje"], ["up", "⬆️", "", "arriba"], ["when", "", "", "cuando"], ["would", "", "", "(para pedir: Would you like…?)"]]}]},
+{id:"flyers",name:"Flyers",icon:"\u2708\ufe0f",units:[{"id": "f-an1", "name": "Animals", "icon": "🐾", "words": [["beetle", "", "", "escarabajo"], ["butterfly", "🦋", "", "mariposa"], ["camel", "🐫", "", "camello"], ["creature", "", "", "criatura"], ["dinosaur", "", "", "dinosaurio"], ["eagle", "🦅", "", "águila"], ["extinct", "", "", "extinguido"], ["fur", "", "", "pelaje"], ["furry", "", "", "peludo"], ["insect", "🐞", "", "insecto"], ["nest", "", "", "nido"], ["octopus", "🐙", "", "pulpo"], ["swan", "", "", "cisne"], ["tortoise", "🐢", "", "tortuga"], ["wing", "", "", "ala"], ["wild", "", "", "salvaje"]]}, {"id": "f-fa1", "name": "People & Family", "icon": "👪", "words": [["husband", "", "", "marido"], ["king", "🤴", "", "rey"], ["married", "💍", "", "casado"], ["queen", "👸", "", "reina"], ["surname", "", "", "apellido"], ["wife", "", "", "esposa"]]}, {"id": "f-bo1", "name": "Body & Health", "icon": "💪", "words": [["bandage", "", "", "venda"], ["elbow", "", "", "codo"], ["finger", "☝️", "", "dedo"], ["knee", "", "", "rodilla"], ["medicine", "💊", "", "medicina"], ["sore", "", "", "dolorido"], ["toe", "", "", "dedo del pie"], ["x-ray", "", "", "radiografía"]]}, {"id": "f-cl1", "name": "Clothes", "icon": "👕", "words": [["belt", "", "", "cinturón"], ["bracelet", "", "", "pulsera"], ["costume", "", "", "disfraz"], ["glove", "", "", "guante"], ["necklace", "📿", "You wear it around your neck.", "collar"], ["pocket", "", "", "bolsillo"], ["pyjamas", "", "", "pijama"], ["rucksack", "🎒", "", "mochila"], ["ring", "💍", "", "anillo"], ["sunglasses", "🕶️", "", "gafas de sol"], ["trainers", "👟", "", "zapatillas de deporte"], ["uniform", "", "", "uniforme"]]}, {"id": "f-co1", "name": "Colours & Shapes", "icon": "🎨", "words": [["spot", "", "", "lunar, mancha"], ["spotted", "", "", "de lunares"], ["stripe", "", "", "raya"], ["striped", "", "", "de rayas"]]}, {"id": "f-num1", "name": "Numbers", "icon": "🔢", "words": [["two hundred", "200", "", "doscientos"], ["five hundred", "500", "", "quinientos"], ["one hundred and one", "101", "", "ciento uno"], ["three hundred and fifty", "350", "", "trescientos cincuenta"], ["seven hundred and twelve", "712", "", "setecientos doce"], ["nine hundred and ninety-nine", "999", "", "novecientos noventa y nueve"], ["twenty-first", "21st", "", "vigésimo primero"], ["twenty-second", "22nd", "", "vigésimo segundo"], ["twenty-third", "23rd", "", "vigésimo tercero"], ["twenty-fifth", "25th", "", "vigésimo quinto"], ["thirtieth", "30th", "", "trigésimo"], ["thirty-first", "31st", "", "trigésimo primero"]]}, {"id": "f-fo1", "name": "Food & Drink", "icon": "🍎", "words": [["butter", "", "", "mantequilla"], ["biscuit", "🍪", "", "galleta"], ["cereal", "", "", "cereales"], ["flour", "", "", "harina"], ["honey", "🍯", "", "miel"], ["jam", "", "", "mermelada"], ["meal", "🍽️", "", "comida"], ["olives", "", "", "aceitunas"], ["pizza", "🍕", "", "pizza"], ["pepper", "🌶️", "", "pimienta, pimiento"], ["salt", "", "", "sal"], ["snack", "", "", "tentempié, merienda"], ["sugar", "", "", "azúcar"], ["strawberry", "🍓", "", "fresa"], ["yoghurt", "", "", "yogur"]]}, {"id": "f-ho1", "name": "Home & Things 1", "icon": "🏠", "words": [["bin", "🗑️", "", "papelera, cubo de basura"], ["brush", "", "", "cepillo, cepillar"], ["comb", "", "", "peine, peinar"], ["cushion", "", "", "cojín"], ["chopsticks", "", "", "palillos chinos"], ["cooker", "", "", "cocina (el aparato)"], ["fork", "🍴", "", "tenedor"], ["fridge", "", "", "nevera"], ["gate", "", "", "puerta (de valla), verja"], ["gold", "🥇", "", "oro"], ["key", "🔑", "You open a door with this.", "llave"], ["knife", "🔪", "", "cuchillo"], ["light", "💡", "", "luz, ligero"]]}, {"id": "f-ho2", "name": "Home & Things 2", "icon": "🏠", "words": [["metal", "", "", "metal"], ["oven", "", "", "horno"], ["plastic", "", "", "plástico"], ["silver", "🥈", "", "plata"], ["shampoo", "", "", "champú"], ["shelf", "", "", "estante"], ["suitcase", "", "", "maleta"], ["spoon", "🥄", "", "cuchara"], ["soap", "", "", "jabón"], ["torch", "🔦", "A small light you carry in the dark.", "linterna"], ["telephone", "☎️", "", "teléfono"], ["umbrella", "☂️", "You use it when it is raining.", "paraguas"], ["wool", "", "", "lana"]]}, {"id": "f-sc1", "name": "School", "icon": "🏫", "words": [["art", "🎨", "", "arte, plástica"], ["college", "", "", "universidad, instituto"], ["dictionary", "📕", "", "diccionario"], ["geography", "🌍", "", "geografía"], ["glue", "", "", "pegamento, pegar"], ["history", "", "", "historia"], ["language", "", "", "idioma"], ["maths", "➗", "", "matemáticas"], ["project", "", "", "proyecto"], ["scissors", "✂️", "You cut paper with these.", "tijeras"], ["science", "🔬", "", "ciencias"], ["subject", "", "", "asignatura"], ["student", "", "", "estudiante"], ["timetable", "", "", "horario"], ["university", "🎓", "", "universidad"]]}, {"id": "f-sp1", "name": "Sports & Free time 1", "icon": "⚽", "words": [["cartoon", "", "", "dibujos animados"], ["concert", "🎶", "", "concierto"], ["chess", "♟️", "", "ajedrez"], ["club", "", "", "club"], ["drum", "🥁", "", "tambor"], ["golf", "⛳", "You hit a small white ball into a hole.", "golf"], ["instrument", "", "", "instrumento"], ["match", "", "", "partido"], ["pop music", "🎵", "", "música pop"], ["puzzle", "", "", "puzle, rompecabezas"], ["race", "🏁", "", "carrera"], ["racing", "🏎️", "", "de carreras"], ["rock music", "🎸", "", "música rock"]]}, {"id": "f-sp2", "name": "Sports & Free time 2", "icon": "⚽", "words": [["ski", "⛷️", "", "esquiar, esquí"], ["sledge", "", "", "trineo, ir en trineo"], ["snowboard", "🏂", "", "tabla de snowboard"], ["snowboarding", "🏂", "", "hacer snowboard"], ["swing", "", "", "columpio, columpiarse"], ["stage", "🎭", "", "escenario"], ["tune", "🎶", "", "melodía"], ["team", "", "", "equipo"], ["tent", "⛺", "You sleep in it when you go camping.", "tienda de campaña"], ["violin", "🎻", "", "violín"], ["volleyball", "🏐", "", "voleibol"], ["winner", "🏆", "", "ganador"]]}, {"id": "f-pl1", "name": "Places 1", "icon": "🏙️", "words": [["airport", "🛫", "", "aeropuerto"], ["bank", "🏦", "", "banco (de dinero)"], ["bridge", "🌉", "", "puente"], ["corner", "", "", "esquina"], ["chemist's", "💊", "", "farmacia"], ["castle", "🏰", "", "castillo"], ["entrance", "", "", "entrada"], ["exit", "🚪", "", "salida"], ["factory", "🏭", "", "fábrica"], ["fire station", "", "", "parque de bomberos"], ["gym", "", "", "gimnasio"], ["hotel", "🏨", "", "hotel"]]}, {"id": "f-pl2", "name": "Places 2", "icon": "🏙️", "words": [["motorway", "🛣️", "", "autopista"], ["museum", "🏛️", "", "museo"], ["platform", "🚉", "", "andén"], ["post office", "🏤", "", "oficina de correos"], ["path", "", "", "camino, sendero"], ["police station", "🚓", "", "comisaría"], ["pyramid", "", "", "pirámide"], ["restaurant", "🍽️", "", "restaurante"], ["skyscraper", "🏙️", "", "rascacielos"], ["straight on", "⬆️", "", "todo recto"], ["stadium", "🏟️", "", "estadio"], ["theatre", "🎭", "", "teatro"]]}, {"id": "f-tr1", "name": "Transport", "icon": "🚗", "words": [["ambulance", "🚑", "", "ambulancia"], ["bicycle", "🚲", "", "bicicleta"], ["engine", "", "", "motor"], ["fire engine", "🚒", "", "camión de bomberos"], ["journey", "", "", "viaje, trayecto"], ["passenger", "", "", "pasajero"], ["rocket", "🚀", "You travel into space in this.", "cohete"], ["railway", "🛤️", "", "ferrocarril"], ["spaceship", "🚀", "", "nave espacial"], ["taxi", "🚕", "", "taxi"], ["tyre", "", "", "neumático"], ["traffic", "🚦", "", "tráfico"], ["wheel", "", "", "rueda"]]}, {"id": "f-na1", "name": "Nature & Weather 1", "icon": "⛅", "words": [["air", "", "", "aire"], ["cave", "", "A big hole in a mountain or under the ground.", "cueva"], ["desert", "🏜️", "A very dry place with lots of sand.", "desierto"], ["environment", "🌍", "", "medio ambiente"], ["east", "", "", "este"], ["fog", "🌫️", "", "niebla"], ["foggy", "🌫️", "", "con niebla"], ["fire", "🔥", "", "fuego"], ["hill", "", "", "colina"], ["land", "🛬", "", "tierra, aterrizar"], ["north", "", "", "norte"], ["ocean", "🌊", "A very big sea.", "océano"]]}, {"id": "f-na2", "name": "Nature & Weather 2", "icon": "⛅", "words": [["planet", "", "Mars and Jupiter are these.", "planeta"], ["pond", "", "", "estanque"], ["south", "", "", "sur"], ["space", "🌌", "Where the stars and planets are.", "espacio"], ["snowball", "", "", "bola de nieve"], ["stone", "", "", "piedra"], ["storm", "⛈️", "", "tormenta"], ["snowman", "⛄", "", "muñeco de nieve"], ["stream", "", "", "arroyo"], ["view", "", "", "vista"], ["wood", "", "", "madera, bosque"], ["west", "", "", "oeste"]]}, {"id": "f-ti1", "name": "Time 1", "icon": "⏰", "words": [["at the moment", "", "", "en este momento"], ["already", "", "", "ya"], ["autumn", "🍂", "The season when leaves fall from the trees.", "otoño"], ["after", "", "", "después (de)"], ["ago", "", "", "hace (tiempo)"], ["before", "", "", "antes (de)"], ["calendar", "📅", "It shows the days and months of the year.", "calendario"], ["century", "", "One hundred years.", "siglo"], ["date", "📅", "", "fecha"], ["early", "", "", "temprano"], ["ever", "", "", "alguna vez"], ["future", "🔮", "", "futuro"], ["half", "", "", "medio, mitad"], ["hour", "⏰", "", "hora"], ["in a minute", "", "", "en un minuto"], ["just", "", "", "justo, acabar de"], ["late", "", "", "tarde"], ["later", "", "", "más tarde"], ["midday", "🕛", "", "mediodía"], ["midnight", "🕛", "Twelve o'clock at night.", "medianoche"], ["month", "📅", "", "mes"]]}, {"id": "f-ti2", "name": "Time 2", "icon": "⏰", "words": [["million", "", "", "millón"], ["minute", "⏱️", "", "minuto"], ["next", "", "", "siguiente"], ["once", "", "", "una vez"], ["past", "", "", "pasado"], ["quarter", "", "", "cuarto"], ["suddenly", "", "", "de repente"], ["still", "", "", "todavía, quieto"], ["summer", "☀️", "The hottest season of the year.", "verano"], ["spring", "🌸", "The season after winter, when flowers grow.", "primavera"], ["soon", "", "", "pronto"], ["tomorrow", "", "The day after today.", "mañana (el día siguiente)"], ["thousand", "", "", "mil"], ["tonight", "🌙", "", "esta noche"], ["time", "⌚", "", "tiempo, hora"], ["twice", "", "", "dos veces"], ["usually", "", "", "normalmente"], ["winter", "❄️", "The coldest season of the year.", "invierno"], ["yet", "", "", "todavía, ya"], ["zero", "0️⃣", "", "cero"]]}, {"id": "f-wo1", "name": "Jobs & Work", "icon": "👷", "words": [["astronaut", "🚀", "This person travels into space.", "astronauta"], ["actor", "🎭", "", "actor"], ["artist", "🎨", "This person paints pictures.", "artista"], ["business", "", "", "negocio"], ["businessman", "💼", "This person works in an office and buys and sells things.", "hombre de negocios"], ["designer", "", "", "diseñador"], ["engineer", "", "", "ingeniero"], ["fire fighter", "🚒", "", "bombero"], ["journalist", "📰", "This person writes stories for a newspaper.", "periodista"], ["job", "", "", "trabajo"], ["manager", "", "", "director, jefe"], ["mechanic", "🔧", "This person repairs cars.", "mecánico"], ["meeting", "", "", "reunión"], ["office", "🏢", "", "oficina"], ["police officer", "👮", "This person helps people and catches thieves.", "policía"], ["photographer", "📷", "This person takes photos.", "fotógrafo"], ["pilot", "✈️", "This person flies a plane.", "piloto"], ["singer", "🎤", "This person sings songs for people.", "cantante"], ["waiter", "🍽️", "This person brings food to your table in a restaurant.", "camarero"]]}, {"id": "f-te1", "name": "Technology", "icon": "💻", "words": [["channel", "📺", "", "canal (de tele)"], ["file", "📁", "", "archivo"], ["online", "", "", "en línea, por internet"], ["screen", "🖥️", "", "pantalla"], ["wifi", "📶", "", "wifi"]]}, {"id": "f-ac1", "name": "Actions 1", "icon": "🏃", "words": [["agree", "", "", "estar de acuerdo"], ["act", "🎭", "", "actuar"], ["appear", "", "", "aparecer"], ["arrive", "", "", "llegar"], ["borrow", "", "", "pedir prestado"], ["begin", "", "", "empezar"], ["believe", "", "", "creer"], ["burn", "🔥", "", "quemar"], ["collect", "", "", "coleccionar, recoger"], ["camp", "⛺", "", "acampar"], ["chat", "💬", "", "charlar, chatear"], ["cut", "✂️", "", "cortar"], ["cycle", "🚴", "", "ir en bici"], ["decide", "", "", "decidir"], ["design", "", "", "diseñar"], ["disappear", "", "", "desaparecer"], ["enter", "", "", "participar (en un concurso)"], ["explain", "", "", "explicar"], ["explore", "", "", "explorar"], ["fall over", "", "", "caerse"]]}, {"id": "f-ac2", "name": "Actions 2", "icon": "🏃", "words": [["find out", "", "", "averiguar"], ["finish", "🏁", "", "terminar"], ["follow", "", "", "seguir"], ["feel", "", "", "sentir(se)"], ["forget", "", "", "olvidar"], ["fetch", "", "", "ir a buscar"], ["go out", "", "", "salir"], ["guess", "🤔", "", "adivinar"], ["get to", "", "", "llegar a"], ["go away", "", "", "irse, marcharse"], ["happen", "", "", "pasar, ocurrir"], ["hurry", "", "", "darse prisa"], ["hope", "", "", "esperar (desear)"], ["hate", "", "", "odiar"], ["hear", "👂", "", "oír"], ["improve", "📈", "", "mejorar"], ["invent", "", "", "inventar"], ["join", "", "", "apuntarse (a un club)"], ["keep", "", "", "guardar, quedarse con"], ["leave", "", "", "irse, dejar"]]}, {"id": "f-ac3", "name": "Actions 3", "icon": "🏃", "words": [["let", "", "", "dejar, permitir"], ["lie", "", "", "tumbarse"], ["look after", "", "", "cuidar"], ["look like", "", "", "parecerse a"], ["may", "", "", "poder (quizás)"], ["make sure", "", "", "asegurarse"], ["mix", "", "", "mezclar"], ["meet", "🤝", "", "conocer, quedar con"], ["might", "", "", "podría (quizás)"], ["mind", "", "", "importar (Do you mind?)"], ["post", "📮", "", "enviar por correo"], ["pull", "", "", "tirar (de), estirar"], ["push", "", "", "empujar"], ["prefer", "", "", "preferir"], ["prepare", "", "", "preparar"], ["repair", "🔧", "", "reparar"], ["repeat", "🔁", "", "repetir"], ["remember", "", "", "recordar"], ["sell", "", "", "vender"], ["should", "", "", "debería"]]}, {"id": "f-ac4", "name": "Actions 4", "icon": "🏃", "words": [["save", "", "", "guardar, salvar, ahorrar"], ["search", "🔍", "", "buscar"], ["sound", "🔊", "", "sonar, sonido"], ["stay", "", "", "quedarse"], ["smell", "👃", "", "oler, olor"], ["speak", "🗣️", "", "hablar"], ["spend", "", "", "gastar, pasar (tiempo)"], ["study", "📚", "", "estudiar"], ["turn", "", "", "girar, turno"], ["taste", "😋", "", "saber (a), probar"], ["turn off", "", "", "apagar"], ["turn on", "", "", "encender"], ["touch", "", "", "tocar"], ["thank", "🙏", "", "dar las gracias"], ["use", "", "", "usar"], ["visit", "", "", "visitar"], ["whisper", "", "", "susurrar"], ["win", "🏆", "", "ganar"], ["will", "", "", "(futuro: I will = yo …ré)"], ["wish", "🌠", "", "desear, deseo"]]}, {"id": "f-de1", "name": "Describing 1", "icon": "🔤", "words": [["alone", "", "", "solo"], ["amazing", "", "", "increíble"], ["broken", "", "", "roto"], ["bored", "😑", "How you feel when there is nothing to do.", "aburrido (que se aburre)"], ["cheap", "", "", "barato"], ["dark", "🌑", "", "oscuro"], ["deep", "", "", "profundo"], ["delicious", "😋", "", "delicioso"], ["excited", "😆", "How you feel before your birthday party!", "emocionado"], ["empty", "", "", "vacío"], ["expensive", "💰", "", "caro"], ["enormous", "", "", "enorme"], ["excellent", "", "", "excelente"], ["friendly", "", "", "simpático"], ["frightening", "", "", "que da miedo"], ["full", "", "", "lleno"], ["fast", "🚀", "", "rápido"]]}, {"id": "f-de2", "name": "Describing 2", "icon": "🔤", "words": [["heavy", "", "", "pesado"], ["hard", "", "", "duro, difícil"], ["high", "", "", "alto"], ["horrible", "", "", "horrible"], ["interested", "", "", "interesado"], ["important", "❗", "", "importante"], ["interesting", "", "", "interesante"], ["lovely", "", "", "precioso"], ["low", "", "", "bajo"], ["large", "", "", "grande"], ["lucky", "🍀", "", "afortunado, con suerte"], ["lazy", "", "", "perezoso"], ["missing", "", "", "perdido, que falta"], ["noisy", "🔊", "", "ruidoso"], ["popular", "", "", "popular"], ["pleased", "😊", "", "contento, satisfecho"], ["poor", "", "", "pobre"]]}, {"id": "f-de3", "name": "Describing 3", "icon": "🔤", "words": [["ready", "", "", "listo, preparado"], ["rich", "💰", "", "rico"], ["same", "", "", "mismo"], ["special", "", "", "especial"], ["strange", "", "", "raro"], ["sure", "", "", "seguro"], ["soft", "", "", "blando, suave"], ["tidy", "", "", "ordenado, ordenar"], ["untidy", "", "", "desordenado"], ["unfriendly", "", "", "antipático"], ["unhappy", "😞", "", "infeliz, triste"], ["unkind", "", "", "poco amable"], ["unusual", "", "", "poco común"], ["warm", "", "", "templado, calentito"], ["wonderful", "", "", "maravilloso"], ["worried", "😟", "How you feel when you think something bad might happen.", "preocupado"]]}, {"id": "f-ex1", "name": "Little words 1", "icon": "💬", "words": [["as", "", "", "como, tan"], ["as ... as", "", "", "tan … como"], ["anywhere", "", "", "en cualquier sitio"], ["actually", "", "", "en realidad"], ["adventure", "", "", "aventura"], ["also", "", "", "también"], ["away", "", "", "lejos, fuera"], ["by myself", "", "", "yo solo"], ["bit", "", "", "trocito, un poco"], ["by yourself", "", "", "tú solo"], ["card", "", "", "tarjeta"], ["competition", "🏆", "", "concurso"], ["crown", "👑", "", "corona"], ["conversation", "💬", "", "conversación"], ["diary", "📔", "", "diario, agenda"], ["dear", "", "", "querido (en cartas)"], ["envelope", "✉️", "You put a letter in this before you post it.", "sobre (de carta)"], ["everywhere", "", "", "en todas partes"], ["else", "", "", "más (what else? = ¿qué más?)"], ["enough", "", "", "suficiente"], ["front", "", "", "parte delantera"]]}, {"id": "f-ex2", "name": "Little words 2", "icon": "💬", "words": [["far", "", "", "lejos"], ["festival", "", "", "festival"], ["flag", "🏳️", "", "bandera"], ["group", "", "", "grupo"], ["how long", "", "", "cuánto tiempo"], ["hole", "🕳️", "", "agujero"], ["invitation", "💌", "", "invitación"], ["if you want", "", "", "si quieres"], ["information", "ℹ️", "", "información"], ["instead", "", "", "en lugar de"], ["left", "⬅️", "", "izquierda"], ["a little", "", "", "un poco"], ["magazine", "", "", "revista"], ["middle", "", "", "medio, centro"], ["money", "💰", "", "dinero"], ["much", "", "", "mucho"], ["member", "", "", "miembro, socio"], ["newspaper", "📰", "", "periódico"], ["nowhere", "", "", "en ninguna parte"], ["news", "📰", "", "noticias"], ["no problem", "", "", "no hay problema"]]}, {"id": "f-ex3", "name": "Little words 3", "icon": "💬", "words": [["of course", "", "", "¡claro!"], ["over", "", "", "encima, por encima"], ["postcard", "", "", "postal"], ["perhaps", "", "", "quizás"], ["prize", "🏆", "", "premio"], ["piece", "", "", "trozo, pieza"], ["problem", "", "", "problema"], ["quite", "", "", "bastante"], ["quiz", "❓", "", "concurso de preguntas"], ["several", "", "", "varios"], ["secret", "", "", "secreto"], ["stamp", "", "", "sello"], ["step", "", "", "paso, escalón"], ["surprise", "🎁", "", "sorpresa"], ["somewhere", "", "", "en algún sitio"], ["tour", "", "", "visita, gira"], ["together", "", "", "juntos"], ["whistle", "", "", "silbato, silbar"], ["way", "", "", "camino, manera"], ["you're welcome", "", "", "de nada"]]}]},
+];
+
+/* ============ INDEX ============ */
+var ITEMS={};
+LEVELS.forEach(function(L,li){
+ L.items=[];
+ L.units.forEach(function(U){
+  U.items=[];U.lvl=li;
+  if(U.gram){U.gram.forEach(function(g,i){var it={id:L.id+'-g'+i,lvl:li,unit:U,kind:'gram',q:g[0],o:g[1],a:g[1][0]};U.items.push(it);ITEMS[it.id]=it;});}
+  else{U.words.forEach(function(w){var it={id:L.id+':'+w[0],lvl:li,unit:U,kind:'word',w:w[0],e:w[1]||'',d:w[2]||'',es:w[3]||''};U.items.push(it);ITEMS[it.id]=it;});}
+  L.items=L.items.concat(U.items);
+ });
+});
+
+/* ============ GRAMMAR (temario oficial Cambridge YLE) ============ */
+var MED=['⚪','🥉','🥈','🥇'], GT={}, GLIST=[];
+function T(id,lvl,icon,name,ex,eg,mc,or,tr){
+ var t={id:id,lvl:lvl,icon:icon,name:name,ex:ex,eg:eg,mc:[],or:[],tr:[]};
+ mc.forEach(function(m,i){t.mc.push({id:'g:'+id+':'+i,kind:'gram',q:m[0],o:m[1],a:m[1][0],topic:t,lvl:lvl})});
+ or.forEach(function(s){t.or.push({kind:'order',s:s,topic:t,lvl:lvl})});
+ (tr||[]).forEach(function(x){t.tr.push({kind:'trans',src:x[0],ins:x[1],ans:x[2],dis:x[3],topic:t,lvl:lvl})});
+ GT[id]=t;GLIST.push(t);
+}
+
+/* ---------- STARTERS ---------- */
+T("s-plural",0,"🍎","Plurales y a / an",
+ "Una cosa: <b>a</b> + palabra (a dog). Si empieza por vocal (a, e, i, o, u): <b>an</b> (an apple). Varias cosas: añadimos <b>-s</b> (dogs). Para cosas que no se cuentan (bread, water): <b>some</b>. ¡Ojo con los irregulares! man → <b>men</b>, woman → <b>women</b>, child → <b>children</b>, foot → <b>feet</b>, mouse → <b>mice</b>, person → <b>people</b>, fish → <b>fish</b>.",
+ [["+","an egg → three eggs","un huevo → tres huevos"],["+","a child → two children","un niño → dos niños"],["+","a mouse → four mice","un ratón → cuatro ratones"],["+","Can I have some bread?","¿Me das pan?"]],
+ [["I have got ___ orange.",["an","a","two"]],["There is ___ dog in the garden.",["a","an","some"]],["I can see three ___.",["children","childs","child"]],["Look at those two ___!",["mice","mouses","mouse"]],["She has got ___ umbrella.",["an","a","two"]],["My ___ are very big.",["feet","foots","foot"]],["Can I have ___ bread, please?",["some","a","an"]],["There are five ___ in the park.",["people","person","peoples"]]],
+ ["I have got an apple.","There are two women here.","The children are happy.","Can I have some water?"],
+ [["a man","Hazlo plural: two","two men",["mans","a"]],["a baby","Hazlo plural: four","four babies",["babys","a"]],["a box","Hazlo plural: three","three boxes",["boxs","a"]]]);
+
+T("s-be",0,"👋","To be: am / is / are",
+ "I <b>am</b> · you / we / they <b>are</b> · he / she / it <b>is</b>. Negativa: añadimos <b>not</b> (I'm not, isn't, aren't). Pregunta: damos la vuelta: <b>Is he…? Are you…?</b> Respuesta corta: Yes, I am / No, he isn't.",
+ [["+","I'm nine. She is my sister.","Tengo nueve años. Ella es mi hermana."],["−","They aren't at school.","No están en el colegio."],["?","Is he your brother? Yes, he is.","¿Es tu hermano? Sí."]],
+ [["My cat ___ black.",["is","are","am"]],["We ___ in the garden.",["are","is","am"]],["I ___ happy today.",["am","is","are"]],["___ you seven? Yes, I am.",["Are","Is","Am"]],["The books ___ on the table.",["are","is","am"]],["He ___ not my brother.",["is","are","am"]],["___ your mum a teacher?",["Is","Are","Am"]],["Are they your friends? Yes, they ___.",["are","is","aren't"]]],
+ ["Is your sister ten?","We are in the park.","My dog isn't big.","Are you my friend?"],
+ [["He is happy.","Haz la pregunta ❓","Is he happy?",["Are","Does"]],["They are at home.","Hazla negativa ➖","They aren't at home.",["isn't","not"]],["You are eight.","Haz la pregunta ❓","Are you eight?",["Is","Do"]]]);
+
+T("s-pron",0,"👤","Pronombres y posesivos",
+ "Quién hace algo: <b>I, you, he, she, it, we, they</b>. Después del verbo: <b>me, you, him, her, it, us, them</b>. De quién es: <b>my / mine, your / yours, his, her / hers, our / ours, their / theirs</b> y <b>'s</b> (Anna's bag). Para preguntar de quién: <b>Whose…?</b>",
+ [["+","This is my bag. It's mine.","Esta es mi mochila. Es mía."],["+","That's Tom's bike.","Esa es la bici de Tom."],["?","Whose is this hat? It's hers.","¿De quién es este sombrero? Es de ella."],["+","Look at him!","¡Míralo!"]],
+ [["This is ___ book. It's mine.",["my","me","I"]],["Can you help ___?",["me","I","my"]],["Is this your pen? Yes, it's ___.",["mine","my","me"]],["___ is that dog? It's Sam's.",["Whose","Who","Where"]],["Look at Anna. ___ is singing.",["She","Her","Hers"]],["I like Ben. I play with ___.",["him","he","his"]],["This is my ___ ball.",["brother's","brothers","brother"]],["They are my friends. I love ___.",["them","they","their"]]],
+ ["This is my sister's doll.","Whose bike is this?","It's his pen.","Give it to me."],
+ [["This is my pen.","Usa mine","This pen is mine.",["my","me"]],["That is her bag.","Usa hers","That bag is hers.",["her","she"]],["the dog of Lucy","Usa 's","Lucy's dog",["Lucy","of"]]]);
+
+T("s-this",0,"👉","This, that, these, those y one",
+ "Cerca: <b>this</b> (uno) / <b>these</b> (varios). Lejos: <b>that</b> (uno) / <b>those</b> (varios). Para no repetir la palabra usamos <b>one</b>: I like the red <b>one</b>.",
+ [["+","This is my book.","Este es mi libro."],["+","Look at those birds!","¡Mira esos pájaros!"],["?","Which T-shirt? The blue one.","¿Qué camiseta? La azul."]],
+ [["___ are my shoes, here.",["These","This","That"]],["Look at ___ plane in the sky!",["that","these","those"]],["___ is my bag, here.",["This","These","Those"]],["Look at ___ cows over there!",["those","this","that"]],["Which ball do you want? The big ___.",["one","ones","it"]],["What are ___? They are my pencils.",["these","this","that"]]],
+ ["I like this hat.","Those are my friends.","I want the green one.","Are these your shoes?"],
+ [["This is my toy.","Hazlo plural","These are my toys.",["This","is"]],["That is a horse.","Hazlo plural","Those are horses.",["That","a"]],["These are apples.","Hazlo singular","This is an apple.",["These","are"]]]);
+
+T("s-there",0,"🏞️","There is / There are",
+ "Para decir lo que <b>hay</b>: <b>There is</b> + una cosa, <b>There are</b> + varias. Pregunta: <b>Is there…? / Are there…?</b> Respuesta: Yes, there is / No, there aren't. ¿Cuántos hay? <b>How many … are there?</b>",
+ [["+","There is a cat on the bed.","Hay un gato en la cama."],["+","There are two apples.","Hay dos manzanas."],["?","Is there a dog? No, there isn't.","¿Hay un perro? No."],["?","How many birds are there?","¿Cuántos pájaros hay?"]],
+ [["There ___ a ball under the chair.",["is","are","am"]],["There ___ three cats in the garden.",["are","is","am"]],["___ there a computer in your room?",["Is","Are","Have"]],["Are there any fish? Yes, there ___.",["are","is","have"]],["There ___ any bananas. Sorry!",["aren't","isn't","not"]],["How many books ___ there?",["are","is","have"]],["Is there a pen in your bag? No, there ___.",["isn't","aren't","not"]]],
+ ["Is there a dog in the park?","There are four chairs.","How many cars are there?","There isn't a lamp."],
+ [["There is a cake.","Haz la pregunta ❓","Is there a cake?",["Are","Has"]],["There are two boys.","Haz la pregunta ❓","Are there two boys?",["Is","Do"]],["There is a spider.","Hazla negativa ➖","There isn't a spider.",["aren't","no"]]]);
+
+T("s-have",0,"🎁","Have got",
+ "Para decir lo que <b>tienes</b>: I / you / we / they <b>have got</b> ('ve got) · he / she / it <b>has got</b> ('s got). Negativa: <b>haven't got / hasn't got</b>. Pregunta: <b>Have you got…? Has she got…?</b>",
+ [["+","I've got a red bike.","Tengo una bici roja."],["+","She has got long hair.","Ella tiene el pelo largo."],["−","He hasn't got a cat.","Él no tiene gato."],["?","Have you got a pet? Yes, I have.","¿Tienes mascota? Sí."]],
+ [["I ___ got two brothers.",["have","has","am"]],["My dog ___ got big ears.",["has","have","is"]],["___ you got a pencil?",["Have","Has","Are"]],["Has she got a sister? No, she ___.",["hasn't","haven't","isn't"]],["We ___ got a garden.",["haven't","hasn't","aren't"]],["___ your dad got a car?",["Has","Have","Is"]]],
+ ["Have you got a ruler?","I have got a new kite.","She has got blue eyes.","He hasn't got a phone."],
+ [["You have got a dog.","Haz la pregunta ❓","Have you got a dog?",["Has","Do"]],["She has got a bike.","Hazla negativa ➖","She hasn't got a bike.",["haven't","not"]],["I have got a hat.","Cambia a: He","He has got a hat.",["have","I"]]]);
+
+T("s-can",0,"🤸","Can / can't",
+ "Para lo que <b>sabes o puedes</b> hacer: <b>can</b> + verbo (¡sin -s!). Si no: <b>can't</b>. Pregunta: <b>Can you…?</b> También para pedir algo: <b>Can I have…, please?</b>",
+ [["+","I can swim.","Sé nadar."],["−","Fish can't walk.","Los peces no pueden andar."],["?","Can you ride a bike? Yes, I can.","¿Sabes ir en bici? Sí."],["?","Can I have an apple, please?","¿Me das una manzana, por favor?"]],
+ [["Birds ___ fly.",["can","cans","are"]],["She can ___ very well.",["sing","sings","singing"]],["___ you play the piano?",["Can","Do","Are"]],["Can he swim? No, he ___.",["can't","isn't","doesn't"]],["___ I have some water, please?",["Can","Am","Do"]],["A fish ___ climb a tree.",["can't","can","isn't"]]],
+ ["Can you play tennis?","My brother can run fast.","I can't draw a horse.","Can I have a pencil, please?"],
+ [["You can swim.","Haz la pregunta ❓","Can you swim?",["Do","swims"]],["He can jump.","Hazla negativa ➖","He can't jump.",["don't","jumps"]],["They can dance.","Haz la pregunta ❓","Can they dance?",["Are","dances"]]]);
+
+T("s-pres",0,"🔁","Present simple: I like / he likes",
+ "Para lo que haces <b>normalmente</b> o lo que te gusta. Con <b>he / she / it</b> el verbo lleva <b>-s</b>: she play<b>s</b>. Negativa: <b>don't / doesn't</b> + verbo. Pregunta: <b>Do you…? / Does he…?</b> (¡y el verbo sin -s!).",
+ [["+","I play football on Saturday.","Juego al fútbol los sábados."],["+","She likes ice cream.","A ella le gusta el helado."],["−","He doesn't like fish.","A él no le gusta el pescado."],["?","Do you like pizza? Yes, I do.","¿Te gusta la pizza? Sí."]],
+ [["My sister ___ milk.",["likes","like","liking"]],["I ___ to school by bus.",["go","goes","going"]],["___ you like apples?",["Do","Does","Are"]],["___ he play tennis?",["Does","Do","Is"]],["We ___ like snakes.",["don't","doesn't","not"]],["Tom ___ eat meat.",["doesn't","don't","isn't"]],["Does she like cats? Yes, she ___.",["does","do","is"]],["He ___ his teeth every day.",["cleans","clean","cleaning"]]],
+ ["Do you like bananas?","She doesn't like rain.","My dad reads books.","Does your cat sleep a lot?"],
+ [["You like cake.","Haz la pregunta ❓","Do you like cake?",["Does","likes"]],["She plays the guitar.","Haz la pregunta ❓","Does she play the guitar?",["Do","plays"]],["He eats fish.","Hazla negativa ➖","He doesn't eat fish.",["don't","eats"]],["I like football.","Cambia a: She","She likes football.",["like","I"]]]);
+
+T("s-cont",0,"🏃","Present continuous: ahora mismo",
+ "Para lo que está pasando <b>ahora mismo</b>: am / is / are + verbo con <b>-ing</b>. Pregunta: <b>What are you doing? Is she running?</b>",
+ [["+","I'm reading a book.","Estoy leyendo un libro."],["+","The dog is sleeping.","El perro está durmiendo."],["−","They aren't swimming.","No están nadando."],["?","What is she doing? She's painting.","¿Qué está haciendo? Está pintando."]],
+ [["Look! The cat is ___.",["jumping","jump","jumps"]],["We ___ playing a game.",["are","is","am"]],["What ___ you doing?",["are","is","do"]],["She is ___ a picture.",["drawing","draws","draw"]],["He ___ sleeping, he's reading.",["isn't","aren't","don't"]],["Is the baby crying? Yes, she ___.",["is","does","are"]],["They are ___ in the sea.",["swimming","swiming","swim"]]],
+ ["What are you doing?","The boy is eating an apple.","Are they playing football?","She isn't singing."],
+ [["He is running.","Haz la pregunta ❓","Is he running?",["Does","Are"]],["They are dancing.","Hazla negativa ➖","They aren't dancing.",["isn't","dance"]],["I eat an apple.","Dilo en este momento (-ing)","I'm eating an apple.",["eat","is"]]]);
+
+T("s-qw",0,"❓","Palabras para preguntar",
+ "<b>What</b> = qué · <b>Who</b> = quién · <b>Where</b> = dónde · <b>Which</b> = cuál · <b>Whose</b> = de quién · <b>How</b> = cómo · <b>How many</b> = cuántos · <b>How old</b> = cuántos años.",
+ [["?","Where is my bag?","¿Dónde está mi mochila?"],["?","How old are you? I'm eight.","¿Cuántos años tienes? Ocho."],["?","Who is that man? He's my uncle.","¿Quién es ese hombre? Es mi tío."],["?","What colour is it? It's red.","¿De qué color es? Es rojo."]],
+ [["___ is your name? My name is Ana.",["What","Who","Where"]],["___ old are you?",["How","What","Who"]],["___ is my pencil? It's in your bag.",["Where","Who","What"]],["___ is that girl? She's my cousin.",["Who","Where","How"]],["How ___ cats have you got?",["many","old","much"]],["___ hat is this? It's Mark's.",["Whose","Who","Which"]],["___ one do you want, the red or the blue?",["Which","Who","How"]],["___ colour is your bike?",["What","How","Who"]]],
+ ["Where is the cat?","How old is your brother?","What colour is the car?","Who is your teacher?"],
+ [["The cat is under the bed.","Pregunta dónde está (Where)","Where is the cat?",["Who","What"]],["I am nine.","Pregunta la edad","How old are you?",["many","What"]]]);
+
+T("s-prep",0,"📦","Preposiciones: in, on, under…",
+ "Lugar: <b>in</b> = dentro · <b>on</b> = encima · <b>under</b> = debajo · <b>behind</b> = detrás · <b>in front of</b> = delante · <b>next to</b> = al lado · <b>between</b> = entre. Tiempo: <b>in</b> the morning, <b>on</b> Monday.",
+ [["+","The cat is under the table.","El gato está debajo de la mesa."],["+","The ball is between the boxes.","La pelota está entre las cajas."],["+","I play on Saturday.","Juego el sábado."]],
+ [["The fish is ___ the water.",["in","on","under"]],["The book is ___ the table, not under it.",["on","in","between"]],["The dog is ___ the tree. I can't see it!",["behind","on","in front of"]],["Sit ___ me, please.",["next to","under","in"]],["The bird is ___ the two trees.",["between","next","under"]],["We go swimming ___ Sunday.",["on","in","at"]],["I read books ___ the evening.",["in","on","at"]]],
+ ["The cat is under the bed.","My bag is next to the door.","I go to school in the morning.","The ball is behind the sofa."],
+ []);
+
+T("s-imp",0,"📢","Órdenes y Let's",
+ "Para dar órdenes usamos el verbo solo: <b>Sit down!</b> Para decir que no: <b>Don't</b> + verbo. Para proponer algo: <b>Let's</b> + verbo (¡vamos a…!).",
+ [["+","Open the door, please.","Abre la puerta, por favor."],["−","Don't run!","¡No corras!"],["+","Let's play!","¡Vamos a jugar!"]],
+ [["___ the window, please.",["Close","Closes","Closing"]],["___ touch the cake!",["Don't","Not","No"]],["___ go to the park!",["Let's","Lets","Let"]],["Please ___ down.",["sit","sits","sitting"]],["Let's ___ a picture.",["draw","draws","drawing"]],["Don't ___ in the classroom.",["shout","shouts","shouting"]]],
+ ["Let's play football.","Don't eat that!","Look at the board.","Please close your books."],
+ [["You run.","Dale la orden en negativo (Don't)","Don't run!",["Not","runs"]],["We go to the beach.","Usa Let's","Let's go to the beach.",["We","goes"]]]);
+
+T("s-like",0,"❤️","Like + -ing y would like",
+ "Para lo que te gusta <b>hacer</b>: <b>like / love / don't like</b> + verbo con <b>-ing</b>: I like swimming. Para pedir algo con educación: <b>I'd like</b> (I would like) + cosa, o <b>to</b> + verbo. Pregunta: <b>Would you like…?</b>",
+ [["+","I like swimming.","Me gusta nadar."],["−","She doesn't like singing.","A ella no le gusta cantar."],["?","Would you like a drink? Yes, please.","¿Quieres algo de beber? Sí, por favor."],["+","I'd like to go to the zoo.","Me gustaría ir al zoo."]],
+ [["I like ___ football.",["playing","play","plays"]],["She loves ___.",["dancing","dance","dances"]],["___ you like some cake?",["Would","Do","Are"]],["I'd like ___ a picture.",["to draw","draw","drawing"]],["Do you like ___?",["reading","read","reads"]],["Swimming ___ fun!",["is","are","am"]]],
+ ["I like riding my bike.","Would you like an apple?","I'd like to play.","He loves reading comics."],
+ [["I play tennis.","Usa I like + -ing","I like playing tennis.",["play","likes"]],["Do you want a drink?","Pregunta con Would","Would you like a drink?",["Do","want"]]]);
+
+T("s-and",0,"🔗","Unir frases: and, but, or",
+ "<b>and</b> = y · <b>but</b> = pero · <b>or</b> = o. Ejemplo: I like cats <b>but</b> I don't like dogs.",
+ [["+","I have got a cat and a dog.","Tengo un gato y un perro."],["+","I like apples but I don't like pears.","Me gustan las manzanas pero no las peras."],["?","Do you want milk or water?","¿Quieres leche o agua?"]],
+ [["I like fish ___ chips.",["and","but","or"]],["She can swim ___ she can't ride a bike.",["but","and","or"]],["Is it big ___ small?",["or","and","but"]],["My dog is black ___ white.",["and","or","but"]],["It's sunny ___ it's cold.",["but","or","and"]],["Do you want a pen ___ a pencil?",["or","but","and"]]],
+ ["I like cats and dogs.","Is it red or blue?","He is small but he is strong.","I have got a brother and a sister."],
+ []);
+
+T("s-phr",0,"💬","Frases útiles de Starters",
+ "Frases que salen mucho en el examen: <b>Here you are</b> (aquí tienes) · <b>Me too!</b> (¡yo también!) · <b>So do I</b> (a mí también) · <b>What a …!</b> (¡qué …!) · <b>Happy birthday!</b> · <b>What now?</b> (¿y ahora qué?).",
+ [["+","Can I have the ball? Here you are.","¿Me das la pelota? Aquí tienes."],["+","I love chocolate. So do I!","Me encanta el chocolate. ¡A mí también!"],["+","What a beautiful bird!","¡Qué pájaro tan bonito!"],["+","Happy birthday! Thank you!","¡Feliz cumpleaños! ¡Gracias!"]],
+ [["Can I have your pen? Yes, here you ___.",["are","is","go"]],["I like ice cream. ___ do I!",["So","Me","Too"]],["I'm hungry. ___ too!",["Me","I","So"]],["What ___ funny dog!",["a","an","the"]],["What ___ ugly monster!",["an","a","the"]],["It's my birthday! Happy ___!",["birthday","day","party"]]],
+ ["What a big elephant!","So do I!","Here you are.","What a lovely day!"],
+ []);
+
+/* ---------- MOVERS ---------- */
+T("m-was",1,"⏪","Pasado: was / were",
+ "El pasado de am / is es <b>was</b>; el de are es <b>were</b>. Negativa: <b>wasn't / weren't</b>. Pregunta: <b>Was he…? Were you…?</b>",
+ [["+","I was at home yesterday.","Ayer estaba en casa."],["+","They were happy.","Estaban contentos."],["−","It wasn't cold.","No hacía frío."],["?","Were you at the park? Yes, I was.","¿Estabas en el parque? Sí."]],
+ [["Yesterday I ___ tired.",["was","were","am"]],["We ___ at the beach last week.",["were","was","are"]],["___ she at school on Monday?",["Was","Were","Is"]],["The film ___ very good. I didn't like it.",["wasn't","weren't","isn't"]],["Were they hungry? Yes, they ___.",["were","was","are"]],["Where ___ you yesterday?",["were","was","are"]]],
+ ["I was at home yesterday.","Were you at the zoo?","It wasn't sunny.","Where was your dog?"],
+ [["He is sad.","Pásala al pasado ⏪","He was sad.",["were","is"]],["They are at school.","Pásala al pasado ⏪","They were at school.",["was","are"]],["You were tired.","Haz la pregunta ❓","Were you tired?",["Was","Did"]]]);
+
+T("m-past",1,"📼","Pasado regular: -ed y did",
+ "Para lo que <b>pasó</b>: verbo + <b>-ed</b> (played, watched). Es igual para todas las personas. Negativa: <b>didn't</b> + verbo normal. Pregunta: <b>Did you…?</b> + verbo normal.",
+ [["+","I played football yesterday.","Ayer jugué al fútbol."],["−","She didn't watch TV.","Ella no vio la tele."],["?","Did you like the film? Yes, I did.","¿Te gustó la peli? Sí."]],
+ [["Last Sunday we ___ a cake.",["cooked","cook","cooks"]],["She ___ to music yesterday.",["listened","listen","listens"]],["___ you play tennis last week?",["Did","Do","Were"]],["I didn't ___ my homework.",["finish","finished","finishes"]],["Did he walk to school? No, he ___.",["didn't","wasn't","doesn't"]],["They ___ in the park last summer.",["played","play","playing"]]],
+ ["We watched a film last night.","Did you visit your grandma?","He didn't clean his room.","She laughed at the clown."],
+ [["I play with my friends.","Pásala al pasado ⏪","I played with my friends.",["play","did"]],["You liked the cake.","Haz la pregunta ❓","Did you like the cake?",["liked","Do"]],["She watched TV.","Hazla negativa ➖","She didn't watch TV.",["watched","doesn't"]]]);
+
+T("m-irr",1,"🌀","Pasado irregular",
+ "Algunos verbos cambian en pasado y hay que aprenderlos: go → <b>went</b>, see → <b>saw</b>, eat → <b>ate</b>, have → <b>had</b>, buy → <b>bought</b>, swim → <b>swam</b>, take → <b>took</b>, come → <b>came</b>, run → <b>ran</b>, make → <b>made</b>. Con <b>didn't</b> y <b>Did…?</b> el verbo vuelve a ser normal.",
+ [["+","We went to the zoo.","Fuimos al zoo."],["+","I saw a whale!","¡Vi una ballena!"],["−","He didn't go to school.","No fue al colegio."],["?","Did you eat pizza? Yes, I did.","¿Comiste pizza? Sí."]],
+ [["Yesterday I ___ to the cinema.",["went","goed","go"]],["We ___ a big shark at the aquarium.",["saw","seed","see"]],["She ___ a sandwich for lunch.",["ate","eated","eats"]],["Did you ___ a good holiday?",["have","had","has"]],["My dad ___ me a new bike.",["bought","buyed","buy"]],["They ___ in the sea last summer.",["swam","swimmed","swim"]],["I ___ lots of photos.",["took","taked","take"]],["We didn't ___ to the party.",["go","went","goes"]]],
+ ["We went to the beach.","I ate a big ice cream.","Did you see the monkeys?","My friend came to my house."],
+ [["I go to the park.","Pásala al pasado ⏪","I went to the park.",["go","goed"]],["She sees a dolphin.","Pásala al pasado ⏪","She saw a dolphin.",["sees","seed"]],["You went to London.","Haz la pregunta ❓","Did you go to London?",["went","Do"]]]);
+
+T("m-comp",1,"📏","Comparativos y superlativos",
+ "Comparar dos: palabra corta + <b>-er than</b> (bigger than) · palabra larga: <b>more … than</b>. El que más: <b>the …-est</b> (the biggest) · <b>the most …</b>. Irregulares: good → <b>better</b> → <b>the best</b>; bad → <b>worse</b> → <b>the worst</b>.",
+ [["+","An elephant is bigger than a dog.","Un elefante es más grande que un perro."],["+","This is the tallest tree in the park.","Es el árbol más alto del parque."],["+","My book is more interesting than yours.","Mi libro es más interesante que el tuyo."],["+","You are my best friend.","Eres mi mejor amigo."]],
+ [["A car is ___ than a bike.",["faster","fast","fastest"]],["Who is the ___ in your class?",["tallest","taller","tall"]],["This film is ___ than that one.",["better","gooder","best"]],["My sister is ___ than me.",["older","old","oldest"]],["This is the ___ day of my life!",["best","better","good"]],["A whale is ___ than a fish.",["bigger","biger","biggest"]],["This book is ___ beautiful than that one.",["more","most","much"]],["Today is ___ than yesterday. It's raining!",["worse","badder","worst"]]],
+ ["My dog is bigger than your cat.","She is the best singer.","Lions are stronger than monkeys.","This is the most beautiful beach."],
+ [["My bag is big. Your bag is small.","Compara (-er than)","My bag is bigger than your bag.",["big","more"]],["Tom is tall. (de la clase)","Usa el superlativo","Tom is the tallest in the class.",["taller","most"]]]);
+
+T("m-adv",1,"🐢","Adverbios: cómo y cada cuánto",
+ "Para decir <b>cómo</b> haces algo: adjetivo + <b>-ly</b> (slow → slowly, quiet → quietly). Irregulares: good → <b>well</b>, fast → <b>fast</b>. Para comparar: <b>faster, better, more slowly</b>. Cada cuánto: <b>always, often, sometimes, never</b> (van antes del verbo).",
+ [["+","The snail moves slowly.","El caracol se mueve despacio."],["+","She sings very well.","Canta muy bien."],["+","I always brush my teeth.","Siempre me lavo los dientes."],["+","He runs faster than me.","Corre más rápido que yo."]],
+ [["Please talk ___. The baby is sleeping.",["quietly","quiet","quieter"]],["She plays the piano very ___.",["well","good","goodly"]],["I ___ eat breakfast. Every day!",["always","never","sometimes"]],["He runs ___ than his brother.",["faster","fastly","more fast"]],["The tortoise walks very ___.",["slowly","slow","slowest"]],["I ___ go to bed late. Only at weekends.",["sometimes","always","never"]]],
+ ["She always walks to school.","He reads very quickly.","I never eat meat.","You dance better than me."],
+ [["He is a slow walker.","Usa el adverbio (-ly)","He walks slowly.",["slow","walk"]],["I go to the park.","Añade always (siempre)","I always go to the park.",["never","goes"]]]);
+
+T("m-must",1,"⚠️","Must / have to / had to",
+ "Obligación: <b>must</b> + verbo (You must listen). También <b>have to / has to</b> + verbo. Prohibido: <b>mustn't</b>. En pasado: <b>had to</b>. Pregunta: <b>Do you have to…?</b>",
+ [["+","You must wear a helmet.","Debes llevar casco."],["+","She has to do her homework.","Tiene que hacer los deberes."],["−","You mustn't run here.","No debes correr aquí."],["+","Yesterday I had to clean my room.","Ayer tuve que limpiar mi cuarto."]],
+ [["It's late. You ___ go to bed.",["must","mustn't","can"]],["He ___ to wear glasses.",["has","have","must"]],["You ___ touch the fire! It's hot.",["mustn't","must","have to"]],["Last week I ___ to see the doctor.",["had","have","must"]],["Do you ___ to wear a uniform?",["have","has","must"]],["We ___ be quiet in the library.",["must","mustn't","has"]]],
+ ["You must wash your hands.","I have to go home now.","You mustn't eat in class.","She had to wait for the bus."],
+ [["I have to study.","Pásala al pasado ⏪","I had to study.",["have","must"]],["She must help.","Usa has to","She has to help.",["have","must"]],["You have to go.","Haz la pregunta ❓","Do you have to go?",["Have","Does"]]]);
+
+T("m-could",1,"🙋","Could y Shall I…?",
+ "<b>could</b> es el pasado de can: When I was three, I <b>could</b> swim. Negativa: <b>couldn't</b>. Para ofrecer ayuda: <b>Shall I</b> + verbo? (¿Quieres que…?).",
+ [["+","When I was five, I could ride a bike.","Con cinco años sabía ir en bici."],["−","I couldn't find my shoes.","No encontraba mis zapatos."],["?","Shall I open the window?","¿Abro la ventana?"]],
+ [["When she was four, she ___ read.",["could","can","cans"]],["I ___ sleep last night. It was too hot.",["couldn't","can't","don't"]],["___ I help you with your bag?",["Shall","Do","Am"]],["___ you swim when you were six?",["Could","Can","Did"]],["Shall I ___ the door for you?",["open","opens","opening"]],["Yesterday we ___ see the moon. It was beautiful.",["could","can","shall"]]],
+ ["Shall I carry your bag?","I could play the piano.","He couldn't find his cat.","Could you swim last year?"],
+ [["I can climb trees.","Pásala al pasado ⏪","I could climb trees.",["can","did"]],["She can't come.","Pásala al pasado ⏪","She couldn't come.",["can't","didn't"]]]);
+
+T("m-verb",1,"➡️","Verbo + to / verbo + -ing",
+ "Algunos verbos van con <b>to</b> + verbo: want to, need to, learn to, start to, try to. Otros con <b>-ing</b>: like, love, enjoy, stop, finish, go (go swimming). Para decir <b>para qué</b>: <b>to</b> + verbo (I went to the shop <b>to buy</b> milk).",
+ [["+","I want to be a pilot.","Quiero ser piloto."],["+","She enjoys reading.","Disfruta leyendo."],["+","We went to the park to play.","Fuimos al parque a jugar."],["+","Let's go swimming!","¡Vamos a nadar!"]],
+ [["I want ___ a new bike.",["to buy","buying","buy"]],["She enjoys ___ pictures.",["painting","to paint","paint"]],["He went to the shop ___ some bread.",["to buy","buying","for buy"]],["Did you finish ___ your book?",["reading","to read","read"]],["We go ___ every Saturday.",["swimming","to swim","swim"]],["I'm learning ___ the guitar.",["to play","playing","play"]]],
+ ["I want to learn English.","She stopped crying.","He went home to sleep.","We love going to the beach."],
+ [["I went to the library. I read books there.","Une con to (para qué)","I went to the library to read books.",["reading","for"]],["She likes to swim.","Usa enjoys + -ing","She enjoys swimming.",["swim","to"]]]);
+
+T("m-ask",1,"🙏","Want / ask someone to… y give it to me",
+ "Para pedir o querer que <b>otra persona</b> haga algo: <b>want / ask</b> + persona + <b>to</b> + verbo. Para dar algo a alguien: give <b>me</b> the book = give the book <b>to me</b>.",
+ [["+","Mum wants me to tidy my room.","Mamá quiere que ordene mi cuarto."],["+","The teacher asked us to sit down.","La profe nos pidió que nos sentáramos."],["+","Give the ball to Tom.","Dale la pelota a Tom."],["?","Can you send me a photo?","¿Me envías una foto?"]],
+ [["I want you ___ me.",["to help","help","helping"]],["She asked ___ to close the door.",["me","I","my"]],["Dad wants ___ to come home.",["us","we","our"]],["Give the book ___ your sister.",["to","for","at"]],["The teacher asked them ___ quiet.",["to be","be","being"]],["Can you give ___ the salt, please?",["me","I","to me"]]],
+ ["My mum wants me to read.","Give the pen to me.","He asked her to dance.","Show me your picture."],
+ [["\"Help me!\" said Mum.","Empieza: Mum asked me…","Mum asked me to help her.",["helping","she"]],["Give me the cup.","Usa to me","Give the cup to me.",["for","I"]]]);
+
+T("m-rel",1,"🔍","Who / which / where para describir",
+ "Para dar más información: personas → <b>who</b> · cosas y animales → <b>which</b> · lugares → <b>where</b>.",
+ [["+","The man who is singing is my uncle.","El hombre que está cantando es mi tío."],["+","This is the cat which lives next door.","Este es el gato que vive al lado."],["+","This is the park where I play.","Este es el parque donde juego."]],
+ [["The girl ___ is dancing is my friend.",["who","which","where"]],["That's the shop ___ I buy comics.",["where","who","which"]],["I like the dog ___ has got black ears.",["which","who","where"]],["A nurse is a person ___ helps doctors.",["who","which","where"]],["This is the house ___ my grandma lives.",["where","who","which"]],["The book ___ is on the table is mine.",["which","who","where"]]],
+ ["The boy who is running is Sam.","This is the school where I study.","I want the cake which has got chocolate.","She is the girl who lives here."],
+ [["This is my friend. She plays tennis.","Une con who","This is my friend who plays tennis.",["which","she"]],["This is the park. I play here.","Une con where","This is the park where I play.",["who","here"]]]);
+
+T("m-when",1,"🔗","Because y when",
+ "<b>because</b> = porque (para explicar por qué) · <b>when</b> = cuando. Para preguntar por qué: <b>Why…?</b> → <b>Because…</b>",
+ [["+","I'm happy because it's my birthday.","Estoy contento porque es mi cumple."],["+","When I was small, I lived in Madrid.","Cuando era pequeño vivía en Madrid."],["?","Why are you sad? Because I lost my toy.","¿Por qué estás triste? Porque perdí mi juguete."]],
+ [["I'm wearing a coat ___ it's cold.",["because","when","but"]],["___ I was three, I had a red bike.",["When","Because","Why"]],["___ are you laughing? Because the film is funny.",["Why","When","Because"]],["She was tired ___ she ran a lot.",["because","when","or"]],["___ it rains, I play inside.",["When","Because","Why"]],["He didn't come to school ___ he was ill.",["because","when","and"]]],
+ ["I like summer because it is hot.","When I was five I lived here.","Why are you happy?","She is tired because she ran."],
+ [["I am hungry. I didn't eat lunch.","Une con because","I am hungry because I didn't eat lunch.",["when","so"]]]);
+
+T("m-time",1,"⏰","Preposiciones de tiempo",
+ "<b>at</b> + hora (at 5 o'clock) · <b>on</b> + día (on Monday) · <b>in</b> + parte del día, mes o estación (in the morning, in May, in summer) · <b>before</b> = antes de · <b>after</b> = después de.",
+ [["+","School starts at nine o'clock.","El cole empieza a las nueve."],["+","My birthday is in May.","Mi cumple es en mayo."],["+","I play after school.","Juego después del cole."]],
+ [["I get up ___ seven o'clock.",["at","on","in"]],["We go swimming ___ Saturday.",["on","at","in"]],["It snows ___ winter.",["in","on","at"]],["Wash your hands ___ lunch.",["before","at","on"]],["I watch TV ___ dinner.",["after","on","in"]],["My party is ___ Friday.",["on","in","at"]]],
+ ["I go to bed at nine.","We have English on Monday.","I play football after school.","It is hot in summer."],
+ []);
+
+T("m-phr",1,"💬","Preguntas y frases de Movers",
+ "<b>What's the weather like?</b> (¿qué tiempo hace?) · <b>What's the matter?</b> (¿qué te pasa?) · <b>What about…? / How about…?</b> (¿y si…?) · <b>be called</b> (llamarse) · <b>be good at</b> (ser bueno en) · <b>go for a walk</b> (ir a dar un paseo) · <b>I think / I know</b>.",
+ [["?","What's the weather like? It's sunny.","¿Qué tiempo hace? Hace sol."],["?","What's the matter? I've got a headache.","¿Qué te pasa? Me duele la cabeza."],["+","I'm good at drawing.","Se me da bien dibujar."],["?","What about going to the park?","¿Qué tal si vamos al parque?"]],
+ [["What's the weather ___? It's rainy.",["like","is","about"]],["What's the ___? I feel sick.",["matter","weather","problem"]],["She is very good ___ swimming.",["at","in","on"]],["My dog is ___ Rex.",["called","calls","name"]],["What ___ playing a game?",["about","like","for"]],["Let's go ___ a walk!",["for","to","at"]]],
+ ["What's the weather like today?","I'm good at maths.","My cat is called Kitty.","What's the matter with you?"],
+ []);
+
+/* ---------- FLYERS ---------- */
+T("f-pcont",2,"🎬","Past continuous: estaba haciendo",
+ "Para lo que <b>estaba pasando</b> en un momento del pasado: <b>was / were</b> + verbo <b>-ing</b>. Muchas veces con <b>when</b>: I was sleeping <b>when</b> the phone rang. <b>while</b> = mientras.",
+ [["+","I was reading at eight o'clock.","A las ocho estaba leyendo."],["+","We were playing when it started to rain.","Estábamos jugando cuando empezó a llover."],["?","What were you doing yesterday at five?","¿Qué hacías ayer a las cinco?"]],
+ [["I ___ watching TV when Dad came home.",["was","were","did"]],["They ___ swimming at ten o'clock.",["were","was","are"]],["What ___ you doing when I called?",["were","was","did"]],["She was ___ a cake when the cat jumped on the table.",["making","make","made"]],["It was raining ___ we went out.",["when","because","but"]],["We ___ sleeping. We were reading.",["weren't","wasn't","didn't"]]],
+ ["I was eating when you called.","What were you doing?","They were playing in the garden.","She was reading a book."],
+ [["I read a book.","Usa was + -ing","I was reading a book.",["were","read"]],["They were dancing.","Haz la pregunta ❓","Were they dancing?",["Was","Did"]]]);
+
+T("f-pp",2,"🌍","Present perfect: ever / never",
+ "Para <b>experiencias</b> de tu vida: <b>have / has</b> + participio (been, seen, eaten, visited). <b>Have you ever…?</b> = ¿Alguna vez has…? <b>never</b> = nunca.",
+ [["?","Have you ever been to London?","¿Has estado alguna vez en Londres?"],["+","I have seen a whale.","He visto una ballena."],["−","She has never eaten sushi.","Nunca ha comido sushi."]],
+ [["Have you ever ___ a dolphin?",["seen","saw","see"]],["She ___ been to Paris.",["has","have","is"]],["I have never ___ a horse.",["ridden","rode","ride"]],["___ you ever eaten snails?",["Have","Has","Did"]],["We have ___ Italy two times.",["visited","visit","visiting"]],["He has ___ been on a plane.",["never","ever","yet"]]],
+ ["Have you ever been to Spain?","I have never seen a ghost.","She has visited London.","Has he ever eaten a snail?"],
+ [["You have seen a lion.","Pregunta con ever","Have you ever seen a lion?",["Did","saw"]],["I have been to Rome.","Hazla con never","I have never been to Rome.",["ever","was"]]]);
+
+T("f-yet",2,"⏳","Already, yet, just, since, for",
+ "Con el present perfect: <b>just</b> = acabo de · <b>already</b> = ya · <b>yet</b> = todavía / ya (al final, en preguntas y negativas). <b>since</b> + momento (since 2020, since Monday) · <b>for</b> + tiempo (for two years).",
+ [["+","I've just finished my homework.","Acabo de terminar los deberes."],["?","Have you finished yet?","¿Ya has terminado?"],["−","I haven't eaten yet.","Todavía no he comido."],["+","We've lived here since 2019.","Vivimos aquí desde 2019."]],
+ [["I have ___ eaten my lunch. I'm not hungry.",["already","yet","since"]],["Have you done your homework ___?",["yet","already","just"]],["I've lived here ___ 2020.",["since","for","from"]],["She has had her cat ___ three years.",["for","since","ago"]],["He has ___ arrived. Say hello!",["just","yet","for"]],["We haven't finished ___.",["yet","already","just"]]],
+ ["I've just seen a rainbow.","Have you finished yet?","We have lived here for two years.","She has already gone home."],
+ [["I haven't eaten.","Añade yet","I haven't eaten yet.",["already","since"]],["I have known her. (2018)","Añade since","I have known her since 2018.",["for","know"]]]);
+
+T("f-fut",2,"🔮","Futuro: going to y will",
+ "<b>going to</b> + verbo: planes que ya has decidido (I'm going to visit Grandma). <b>will</b> + verbo: lo que crees que pasará o decides en el momento (It will be sunny tomorrow). Negativa de will: <b>won't</b>.",
+ [["+","I'm going to play tennis on Saturday.","Voy a jugar al tenis el sábado."],["+","I think it will rain tomorrow.","Creo que mañana lloverá."],["−","She won't come to the party.","No vendrá a la fiesta."],["?","What are you going to do?","¿Qué vas a hacer?"]],
+ [["Look at the clouds! It's going ___ rain.",["to","will","for"]],["I think you ___ like this book.",["will","are","going"]],["We're ___ to fly to London next week.",["going","go","will"]],["Don't worry, I ___ tell anyone.",["won't","don't","not"]],["What ___ you going to wear?",["are","will","do"]],["In the future people ___ live on Mars.",["will","are","going"]]],
+ ["I'm going to buy a new bike.","Will you help me?","It won't be cold tomorrow.","What are you going to eat?"],
+ [["I play football.","Usa going to","I'm going to play football.",["will","plays"]],["She comes.","Usa will","She will come.",["comes","going"]]]);
+
+T("f-might",2,"🤔","Might / may",
+ "Para algo que <b>quizás</b> pase: <b>might</b> o <b>may</b> + verbo. Negativa: <b>might not</b>. ¡El verbo no cambia!",
+ [["+","It might rain later.","Quizás llueva luego."],["+","I may go to the beach tomorrow.","Puede que vaya a la playa mañana."],["−","She might not come.","Puede que no venga."]],
+ [["Take a coat. It ___ be cold.",["might","must","has"]],["I'm not sure. I ___ go to the party.",["may","am","will to"]],["He might ___ late.",["be","is","being"]],["We may ___ a picnic tomorrow.",["have","has","having"]],["It ___ not snow. I'm not sure.",["might","is","does"]],["Where is Sam? He ___ be in the garden.",["may","is","does"]]],
+ ["It might rain tomorrow.","I may visit my aunt.","She might not like it.","We might go to the zoo."],
+ [["Perhaps it will snow.","Usa might","It might snow.",["will","snows"]]]);
+
+T("f-should",2,"💡","Should, could y Shall we…?",
+ "Consejos: <b>should</b> + verbo (deberías) · <b>shouldn't</b> (no deberías). Ideas: <b>could</b> (podríamos). Proponer: <b>Shall we…?</b> (¿…?).",
+ [["+","You should drink water.","Deberías beber agua."],["−","You shouldn't eat so many sweets.","No deberías comer tantos caramelos."],["?","Shall we go to the cinema?","¿Vamos al cine?"],["+","We could play a game.","Podríamos jugar a algo."]],
+ [["You're tired. You ___ go to bed.",["should","shouldn't","shall"]],["You ___ watch TV all day.",["shouldn't","should","shall"]],["___ we play a game?",["Shall","Should","Do"]],["I'm bored. We ___ go to the park.",["could","shall","must to"]],["You should ___ your teeth.",["brush","brushes","to brush"]],["What ___ I do? I lost my key.",["should","must to","am"]]],
+ ["You should wear a hat.","Shall we dance?","We could go swimming.","You shouldn't shout."],
+ [["Go to the doctor. (consejo)","Usa should","You should go to the doctor.",["shall","goes"]],["Let's play cards.","Usa Shall we…?","Shall we play cards?",["Let's","Should"]]]);
+
+T("f-tag",2,"🏷️","Tag questions: …, isn't it?",
+ "Coletilla al final para confirmar (¿verdad?). Si la frase es positiva, la coletilla es negativa, y al revés: It's cold, <b>isn't it?</b> · You can swim, <b>can't you?</b> · She doesn't like fish, <b>does she?</b>",
+ [["?","It's a lovely day, isn't it?","Hace un día precioso, ¿verdad?"],["?","You like pizza, don't you?","Te gusta la pizza, ¿verdad?"],["?","He can't swim, can he?","No sabe nadar, ¿verdad?"]],
+ [["It's hot today, ___ it?",["isn't","is","doesn't"]],["You like chocolate, ___ you?",["don't","do","aren't"]],["She can dance, ___ she?",["can't","can","doesn't"]],["They aren't here, ___ they?",["are","aren't","do"]],["He played football, ___ he?",["didn't","did","wasn't"]],["You have been to Paris, ___ you?",["haven't","have","didn't"]]],
+ ["It's cold, isn't it?","You can swim, can't you?","She likes cats, doesn't she?","They were late, weren't they?"],
+ []);
+
+T("f-if",2,"🔄","If: si pasa esto…",
+ "Para cosas que <b>siempre</b> pasan: <b>If</b> + presente, presente. If you heat ice, it melts (si calientas hielo, se derrite).",
+ [["+","If you mix red and white, you get pink.","Si mezclas rojo y blanco, sale rosa."],["+","If it rains, we play inside.","Si llueve, jugamos dentro."],["+","If I am tired, I go to bed early.","Si estoy cansado, me acuesto pronto."]],
+ [["If you heat water, it ___.",["boils","boil","boiled"]],["___ you drop an egg, it breaks.",["If","So","But"]],["If plants ___ get water, they die.",["don't","doesn't","didn't"]],["If my dog is hungry, it ___.",["barks","bark","barking"]],["If you mix blue and yellow, you ___ green.",["get","gets","got"]],["If it ___ cold, I wear a coat.",["is","are","be"]]],
+ ["If it is sunny, we go out.","If you eat too much, you feel ill.","Ice melts if it is hot.","If I am sad, I call my friend."],
+ [["It rains. I take an umbrella.","Une con If","If it rains, I take an umbrella.",["When","took"]]]);
+
+T("f-clause",2,"🔗","Before, after, until, where y so",
+ "<b>before</b> = antes de · <b>after</b> = después de · <b>until</b> = hasta que · <b>where</b> = donde · <b>so</b> = así que. Ejemplo: I brush my teeth <b>before</b> I go to bed.",
+ [["+","I do my homework before I watch TV.","Hago los deberes antes de ver la tele."],["+","After we had lunch, we went to the beach.","Después de comer fuimos a la playa."],["+","It was raining, so we stayed at home.","Llovía, así que nos quedamos en casa."]],
+ [["Wash your hands ___ you eat.",["before","after","so"]],["___ the film finished, we went home.",["After","Before","Where"]],["I was hungry, ___ I ate a sandwich.",["so","because","where"]],["That's the beach ___ we found the shells.",["where","who","so"]],["Wait here ___ I come back.",["until","so","where"]],["I go to bed ___ I read a story.",["after","where","so"]]],
+ ["I read before I sleep.","It was late so we went home.","This is where I live.","We played after school."],
+ [["It was cold. We stayed inside.","Une con so","It was cold so we stayed inside.",["because","where"]]]);
+
+T("f-phr",2,"💬","Expresiones de Flyers",
+ "<b>be made of</b> (estar hecho de) · <b>look / sound / taste / smell / feel</b> + adjetivo (parece, suena, sabe, huele, se nota) · <b>look like</b> + cosa (parecerse a) · <b>make</b> + alguien + adjetivo (Music makes me happy) · <b>What time…?</b> · <b>What else? / What next?</b> · <b>See you soon!</b>",
+ [["+","This table is made of wood.","Esta mesa está hecha de madera."],["+","This soup tastes great!","¡Esta sopa sabe genial!"],["+","That cloud looks like a rabbit.","Esa nube parece un conejo."],["+","Music makes me happy.","La música me pone contento."]],
+ [["My ring is made ___ gold.",["of","by","with"]],["This cake ___ delicious!",["tastes","tastes like","taste"]],["That sounds ___!",["great","greatly","like great"]],["That rock looks ___ a face.",["like","as","of"]],["Cartoons make me ___.",["happy","happily","happiness"]],["___ time does the film start?",["What","How","When"]],["Bye! See you ___!",["soon","after","next"]]],
+ ["This box is made of paper.","Your idea sounds good.","The flower smells nice.","What time is it?"],
+ []);
+
+/* ============ STATE ============ */
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function newProfile(lvl){return {placed:true,level:lvl||0,done:false,m:{},wrong:{},stars:0,days:{},skill:{},exams:[],history:[]}}
+var S=load()||{p:{}};
+if(!S.students)S.students=[];KIDS=S.students;
+KIDS.forEach(function(k){if(!S.p[k.id])S.p[k.id]=newProfile(k.lvl)});
+var REVIEW_MIX=3;
+function revItems(p,li){var a=[];for(var i=0;i<li;i++)a=a.concat(LEVELS[i].items);return a}
+function revOK(p){for(var i=0;i<p.level;i++){if(prog(p,LEVELS[i].items).pct<UNLOCK)return false}return true}
+function revGramPend(p){return GLIST.filter(function(t){return t.lvl<p.level&&gOf(p,t.id).medal<2})}
+function revIsl(p){var h='';for(var i=0;i<p.level;i++){var L=LEVELS[i],pr=prog(p,L.items);
+ h+='<div class="card" style="background:#f3f8ff"><h2>🔁 Repaso de '+L.icon+' '+L.name+' <span class="muted" style="font-size:16px">'+Math.round(pr.pct*100)+'%</span></h2>'+bar(pr.pct)+
+ '<p class="muted">Si aciertas una palabra de repaso a la primera, ¡ya cuenta como sabida! Necesitas el 85% para el examen.</p><div class="islands">'+
+ L.units.map(function(U){var up=prog(p,U.items);return '<button class="btn island" onclick="practice(\''+U.id+'\')"><span class="ic">'+U.icon+'</span><span class="nm">'+(up.l===up.t?'👑 ':'')+U.name+'</span>'+bar(up.pct,1)+'<span class="muted" style="font-size:14px">'+up.l+' / '+up.t+'</span></button>'}).join('')+'</div></div>'}
+ return h}
+var cur=null,SES=null,LOCK=false,SP=null,REG=[];
+function P(){return S.p[cur]}
+function kid(){return KIDS.filter(function(k){return k.id===cur})[0]}
+
+/* ============ HELPERS ============ */
+function $(s){return document.querySelector(s)}
+function render(h){$('#app').innerHTML=h;window.scrollTo(0,0)}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+function fmt(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function today(){return fmt(new Date())}
+function mOf(p,id){return p.m[id]||0}
+function learned(p,it){return mOf(p,it.id)>=LEARN}
+function prog(p,items){var l=items.filter(function(i){return learned(p,i)}).length;return {l:l,t:items.length,pct:items.length?l/items.length:0}}
+function streak(p){var d=new Date(),n=0;if(!p.days[fmt(d)])d.setDate(d.getDate()-1);while(p.days[fmt(d)]){n++;d.setDate(d.getDate()-1)}return n}
+function pic(e){return e&&e.charAt(0)==='#'?'<span class="sw" style="background:'+e+'"></span>':e}
+function reg(x){REG.push(x);return REG.length-1}
+function gOf(p,tid){if(!p.g)p.g={};return p.g[tid]||(p.g[tid]={medal:0,diag:-1})}
+function topicsOf(li){return GLIST.filter(function(t){return t.lvl===li})}
+function gramDone(p,li){return topicsOf(li).filter(function(t){return gOf(p,t.id).medal>=2}).length}
+function pendingT(p,t){var g=gOf(p,t.id);return g.medal<2&&(g.diag===0||g.diag===1||(t.lvl<p.level&&g.diag<0))}
+function medalStr(m){return [1,2,3].map(function(i){return i<=m?MED[i]:'⚪'}).join('')}
+function fill(arr,n){var a=shuffle(arr.slice()),out=[];if(!a.length)return out;for(var i=0;i<n;i++)out.push(a[i%a.length]);return out}
+function rightOf(q){var it=q.it;if(it.kind==='gram')return it.q.replace('___',it.a);if(it.kind==='order')return it.s;if(it.kind==='trans')return it.ans;return it.w}
+function bar(pct,sm){return '<div class="bar'+(sm?' sm':'')+'"><i style="width:'+Math.round(pct*100)+'%"></i></div>'}
+
+/* ============ VOICE ============ */
+var HAS_TTS=('speechSynthesis' in window), VOICE=null;
+function pickVoice(){if(!HAS_TTS)return;var vs=speechSynthesis.getVoices();VOICE=vs.filter(function(v){return /en[-_]GB/i.test(v.lang)})[0]||vs.filter(function(v){return /^en/i.test(v.lang)})[0]||null}
+if(HAS_TTS){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function say(t){if(!HAS_TTS||!t)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang=VOICE?VOICE.lang:'en-GB';if(VOICE)u.voice=VOICE;u.rate=0.85;speechSynthesis.speak(u)}catch(e){}}
+function sayReg(i){say(REG[i])}
+
+/* ============ SCREENS ============ */
+function home(){
+ cur=null;REG=[];
+ var h='<div class="center"><h1 style="font-size:40px">🌍 EnglishMundo</h1><p class="big muted">Cambridge Starters · Movers · Flyers</p></div>';
+ if(!KIDS.length)h+='<div class="card center pop"><div style="font-size:64px">👋</div><h2>¡Bienvenido!</h2><p class="big">Todavía no hay alumnos. Un adulto tiene que añadirlos.</p><button class="btn primary" style="font-size:24px" onclick="parentGate(\'add\')">➕ Añadir alumno</button></div>';
+ else h+='<p class="big muted center">¿Quién va a jugar?</p><div class="profiles">'+KIDS.map(function(k){var p=S.p[k.id],lv=LEVELS[p.level];
+  return '<button class="btn prof" onclick="pick(\''+k.id+'\')"><span class="av">'+k.av+'</span>'+esc(k.name)+
+  '<div class="muted" style="font-size:16px;margin-top:6px">'+lv.icon+' '+lv.name+' · ⭐ '+p.stars+'</div></button>'}).join('')+'</div>';
+ h+='<div class="row" style="margin-top:24px">'+(KIDS.length?'<button class="btn" onclick="parentGate(\'add\')">➕ Añadir alumno</button>':'')+'<button class="btn" onclick="parentGate()">🔐 Zona de adultos</button></div>';
+ render(h);
+}
+function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var NEW={av:'🦄',lvl:0};
+function addStudent(back){
+ NEW.back=back||'home';
+ render('<div class="top"><button class="btn" onclick="'+(NEW.back==='parents'?'parents()':'home()')+'">⬅ Volver</button></div><div class="card"><h2>➕ Nuevo alumno</h2>'+
+  '<p class="big">Nombre</p><input id="nm" type="text" maxlength="20" style="width:100%;text-align:left" placeholder="Nombre del alumno">'+
+  '<p class="big">Elige un dibujo</p><div class="stickers" id="avs">'+AVATARS.map(function(a){return '<div class="btn" style="padding:6px;'+(a===NEW.av?'background:#ffe0b2':'')+'" onclick="NEW.av=\''+a+'\';addStudentRefresh()">'+a+'</div>'}).join('')+'</div>'+
+  '<p class="big">¿En qué nivel empieza?</p><div class="row" style="justify-content:flex-start" id="lvs">'+LEVELS.map(function(l,i){return '<button class="btn'+(i===NEW.lvl?' primary':'')+'" onclick="NEW.lvl='+i+';addStudentRefresh()">'+l.icon+' '+l.name+'</button>'}).join('')+'</div>'+
+  '<p class="muted">Si empieza en Movers o Flyers, tendrá que repasar el vocabulario y la gramática de los niveles anteriores.</p>'+
+  '<div class="center"><button class="btn green" style="font-size:24px" onclick="saveStudent()">✔ Guardar</button></div><p id="nerr" style="color:#c62828" class="center"></p></div>');
+}
+function addStudentRefresh(){var v=$('#nm').value;addStudent(NEW.back);$('#nm').value=v}
+function saveStudent(){var n=$('#nm').value.trim();if(!n){$('#nerr').textContent='Escribe un nombre';return}
+ var id='a'+Date.now().toString(36);KIDS.push({id:id,name:n,av:NEW.av,lvl:NEW.lvl});S.p[id]=newProfile(NEW.lvl);save();
+ var bk=NEW.back;NEW={av:'🦄',lvl:0};if(bk==='parents')parents();else home()}
+function pick(id){cur=id;map()}
+function header(){var k=kid(),p=P();
+ return '<div class="top"><button class="btn" onclick="home()">🏠</button><div class="hud"><span class="pill" style="font-size:22px">'+k.av+' '+esc(k.name)+'</span><span class="pill">⭐ '+p.stars+'</span><span class="pill">🔥 '+streak(p)+' días</span></div></div>'}
+
+function map(){
+ REG=[];var p=P(),li=p.level,L=LEVELS[li],pr=prog(p,L.items),next=LEVELS[li+1];
+ var need=Math.max(0,Math.ceil(pr.t*UNLOCK)-pr.l),gt=topicsOf(li).length,gneed=gt-gramDone(p,li);
+ var rgp=revGramPend(p).length,rok=revOK(p),canExam=need===0&&gneed===0&&rok&&rgp===0;
+ var pend=GLIST.filter(function(t){return pendingT(p,t)}).length;
+ var revTxt='';for(var ri=0;ri<li;ri++){var rp=prog(p,LEVELS[ri].items);if(rp.pct<UNLOCK)revTxt+='<br>🔁 repaso de vocabulario de <b>'+LEVELS[ri].name+'</b> ('+Math.round(rp.pct*100)+'% de 85%)'}
+ var goal;
+ if(p.done)goal='🏆 <b>¡Has superado Flyers!</b> Sigue practicando para el examen de verdad.';
+ else if(canExam)goal='🎉 <b>¡Ya puedes hacer el examen'+(next?' para pasar a '+next.name:' final de Flyers')+'!</b>';
+ else goal='Para '+(next?'pasar a <b>'+next.icon+' '+next.name+'</b>':'aprobar <b>Flyers</b>')+' te faltan:'+(need?'<br>📚 <b>'+need+'</b> palabras de '+L.name:'')+(gneed?'<br>📘 <b>'+gneed+'</b> temas de gramática de '+L.name+' con 🥈':'')+revTxt+(rgp?'<br>📌 <b>'+rgp+'</b> temas de gramática de repaso con 🥈':'')+'<br>🏆 y aprobar el examen.';
+ var path='<div class="path">'+LEVELS.map(function(l,i){var c=(i<li||(i===li&&p.done))?'done':(i===li?'now':'');var rv=i<li&&(prog(p,l.items).pct<UNLOCK||topicsOf(i).some(function(t){return gOf(p,t.id).medal<2}));if(rv)c='';return '<span class="step '+c+'">'+(rv?'🔁 ':(c==='done'?'✅ ':(i>li?'🔒 ':'')))+l.icon+' '+l.name+'</span>'}).join('<span>➜</span>')+'</div>';
+ var isl=L.units.map(function(U){var up=prog(p,U.items);var crown=up.l===up.t?'👑 ':'';
+  return '<button class="btn island" onclick="practice(\''+U.id+'\')"><span class="ic">'+U.icon+'</span><span class="nm">'+crown+U.name+'</span>'+bar(up.pct,1)+'<span class="muted" style="font-size:14px">'+up.l+' / '+up.t+'</span></button>'}).join('');
+ render(header()+
+ '<div class="card">'+path+'<h2 style="margin-top:12px">'+L.icon+' Nivel '+L.name+'</h2>'+bar(pr.pct)+
+ '<p class="muted" style="margin:6px 0">📚 Palabras: <b>'+pr.l+'</b> de <b>'+pr.t+'</b> (el examen se abre al 85%) · 📘 Gramática: <b>'+(gt-gneed)+'</b> de <b>'+gt+'</b> temas con 🥈</p><p class="big" style="margin:8px 0">'+goal+'</p>'+
+ '<div class="row" style="margin-top:12px"><button class="btn primary" onclick="practice()">▶ Jugar</button>'+
+ '<button class="btn blue" onclick="grammarHome()">📘 Gramática'+(pend?' <span style="background:#ff9800;border-radius:10px;padding:0 8px">📌 '+pend+'</span>':'')+'</button>'+
+ '<button class="btn" onclick="toLearn()">📋 Lo que me falta</button>'+
+ (canExam?'<button class="btn green" onclick="examIntro()">🏆 Examen</button>':'<button class="btn" style="opacity:.55" onclick="toLearn()">🔒 Examen</button>')+
+ '<button class="btn" onclick="stickers()">🎁 Stickers</button></div></div>'+
+ '<h2>🏝️ Islas de '+L.name+'</h2><div class="islands">'+isl+'</div><div style="height:14px"></div>'+revIsl(p));
+}
+
+function toLearn(){
+ REG=[];var p=P(),L=LEVELS[p.level],pr=prog(p,L.items);
+ var need=Math.max(0,Math.ceil(pr.t*UNLOCK)-pr.l);
+ var html=header()+'<div class="card"><button class="btn" onclick="map()">⬅ Volver</button><h2 style="margin-top:12px">📋 Lo que tengo que aprender para pasar '+L.name+'</h2>'+bar(pr.pct)+
+  '<p class="big">'+(need>0?'Te faltan <b>'+need+'</b> para abrir el examen.':'¡Ya puedes hacer el examen! 🎉')+'</p>'+
+  '<p class="muted">🟩 aprendida · 🟨 casi · ⬜ todavía no. Toca una palabra para oírla.</p></div>';
+ html+='<div class="card"><h3>📘 Gramática de '+L.name+' <span class="muted" style="font-size:16px">('+gramDone(p,p.level)+'/'+topicsOf(p.level).length+' con 🥈)</span></h3><p class="muted">Necesitas al menos 🥈 en cada tema. Toca un tema para estudiarlo.</p><div class="words">'+
+  topicsOf(p.level).map(function(t){var m=gOf(p,t.id).medal;return '<button class="wchip '+(m>=2?'l':(m>0?'p':''))+'" onclick="topic(\''+t.id+'\')">'+t.icon+' '+t.name+' '+medalStr(m)+'</button>'}).join('')+'</div>';
+ var pl=GLIST.filter(function(t){return t.lvl<p.level&&pendingT(p,t)});
+ if(pl.length)html+='<h3 style="margin-top:14px">📌 Repaso pendiente de niveles anteriores</h3><div class="words">'+pl.map(function(t){return '<button class="wchip p" onclick="topic(\''+t.id+'\')">'+t.icon+' '+t.name+'</button>'}).join('')+'</div>';
+ html+='</div>';
+ L.units.forEach(function(U){var up=prog(p,U.items);
+  html+='<div class="card"><h3>'+U.icon+' '+U.name+' <span class="muted" style="font-size:16px">'+up.l+'/'+up.t+'</span> <button class="btn" style="font-size:16px;padding:8px 14px;float:right" onclick="practice(\''+U.id+'\')">▶ Practicar</button></h3><div class="words" style="clear:both;margin-top:10px">'+
+  U.items.map(function(it){var m=mOf(p,it.id),c=m>=LEARN?'l':(m>0?'p':'');
+   if(it.kind==='gram'){var s=it.q.replace('___',it.a);return '<button class="wchip '+c+'" onclick="sayReg('+reg(s)+')">'+(m>=LEARN?s:it.q)+'</button>'}
+   return '<button class="wchip '+c+'" onclick="sayReg('+reg(it.w)+')">'+(it.e&&it.e.charAt(0)!=='#'?it.e+' ':'')+it.w+(it.es?' <span class="muted" style="font-size:14px">'+it.es+'</span>':'')+'</button>'}).join('')+'</div></div>';
+ });
+ var p2=P();for(var ri=0;ri<p2.level;ri++){var RL=LEVELS[ri],rp=prog(p2,RL.items);
+  html+='<div class="card" style="background:#f3f8ff"><h3>🔁 Repaso de vocabulario de '+RL.name+' — '+Math.round(rp.pct*100)+'% (necesitas 85%)</h3>'+bar(rp.pct)+'<div class="words" style="margin-top:10px">'+
+  RL.items.filter(function(it){return !learned(p2,it)}).map(function(it){return '<button class="wchip '+(mOf(p2,it.id)>0?'p':'')+'" onclick="sayReg('+reg(it.w)+')">'+(it.e&&it.e.charAt(0)!=='#'?it.e+' ':'')+it.w+(it.es?' <span class="muted" style="font-size:14px">'+it.es+'</span>':'')+'</button>'}).join('')+'</div><p class="muted">Solo se muestran las que te faltan.</p></div>'}
+ render(html);
+}
+
+function stickers(){
+ var p=P(),n=Math.floor(p.stars/STICKER_EVERY),left=STICKER_EVERY-(p.stars%STICKER_EVERY);
+ render(header()+'<div class="card"><button class="btn" onclick="map()">⬅ Volver</button><h2 style="margin-top:12px">🎁 Mis stickers ('+Math.min(n,STICKERS.length)+'/'+STICKERS.length+')</h2><p class="big">Próximo sticker en <b>'+left+' ⭐</b></p><div class="stickers">'+
+  STICKERS.map(function(s,i){return '<div>'+(i<n?s:'❔')+'</div>'}).join('')+'</div></div>');
+}
+
+/* ============ QUESTIONS ============ */
+function modesFor(it){
+ if(it.kind==='gram')return ['gram'];
+ var m=[];
+ if(it.e&&HAS_TTS)m.push('listen');
+ if(it.e)m.push('pic');
+ if(it.d)m.push('def');
+ if(it.es){m.push('es2en');m.push('en2es');if(HAS_TTS)m.push('listen2es')}
+ if(/^[a-z]{3,10}$/i.test(it.w))m.push('spell');
+ if(it.e)m.push('yesno');
+ return m;
+}
+function distract(it,n,needE){
+ var out=[],W={},E={},ES={};W[it.w]=1;if(it.e)E[it.e]=1;if(it.es)ES[it.es]=1;
+ var pools=[shuffle(it.unit.items.slice()),shuffle(LEVELS[it.lvl].items.slice())];
+ for(var a=0;a<pools.length;a++)for(var b=0;b<pools[a].length;b++){var x=pools[a][b];
+  if(out.length>=n)return out;
+  if(x.kind!=='word'||W[x.w])continue;if(needE&&!x.e)continue;if(x.e&&E[x.e])continue;if(x.es&&ES[x.es])continue;
+  W[x.w]=1;if(x.e)E[x.e]=1;if(x.es)ES[x.es]=1;out.push(x);}
+ return out;
+}
+function makeQ(it,mode,recog){
+ if(it.kind==='order'||it.kind==='trans')return {it:it,mode:it.kind};
+ if(mode==='gtf'){var q0={it:it,mode:'gtf'};q0.truth=Math.random()<0.5;var wr=it.o.filter(function(o){return o!==it.a});q0.shown=it.q.replace('___',q0.truth?it.a:rnd(wr));return q0}
+ var ms=modesFor(it),r;
+ if(!mode){
+  if(recog){r=ms.filter(function(m){return m!=='spell'&&m!=='yesno'});if(r.length)ms=r}
+  else if(mOf(P(),it.id)===0){r=ms.filter(function(m){return m!=='spell'});if(r.length)ms=r}
+  mode=rnd(ms);
+ }
+ var q={it:it,mode:mode};
+ if(mode==='gram'){q.opts=shuffle(it.o.slice());q.ans=q.opts.indexOf(it.a)}
+ else if(mode==='listen'||mode==='pic'||mode==='def'||mode==='es2en'||mode==='en2es'||mode==='listen2es'){q.opts=shuffle([it].concat(distract(it,3,mode==='listen')));q.ans=q.opts.indexOf(it)}
+ else if(mode==='yesno'){q.truth=Math.random()<0.5;q.shown=it.w;if(!q.truth){var d=distract(it,1)[0];if(d)q.shown=d.w;else q.truth=true}}
+ return q;
+}
+function cq(){return SES.qs[SES.i]}
+
+function renderQ(){
+ LOCK=false;var q=cq(),it=q.it,n=SES.qs.length;
+ var label={exam:'🏆 Examen',place:'🔎 Prueba',gdiag:'🔎 Prueba gramática',gram:'📘',gmix:'🔀'}[SES.kind]||'';
+ var top='<div class="top"><button class="btn" onclick="quitSes()">✖</button><div style="flex:1;margin:0 12px">'+bar(SES.i/n)+'</div><span class="pill">'+label+' '+(SES.i+1)+'/'+n+'</span></div>';
+ var title={listen:'Escucha y toca el dibujo',pic:'¿Cómo se dice en inglés?',def:'Lee y elige la palabra',spell:'Escribe la palabra',yesno:'¿Está bien?',gram:'Elige la palabra que falta',gtf:'¿Está bien o mal?',es2en:'¿Cómo se dice en inglés?',en2es:'¿Qué significa?',listen2es:'Escucha: ¿qué significa?',order:'Ordena la frase',trans:'Transforma la frase'}[q.mode];
+ var b='';
+ function wordOpts(){return '<div class="opts">'+q.opts.map(function(o,i){return '<button class="btn opt" id="o'+i+'" onclick="choose('+i+')">'+o.w+'</button>'}).join('')+'</div>'}
+ if(q.mode==='listen')b='<button class="btn speak blue" onclick="say(cq().it.w)">🔊</button><div class="opts">'+q.opts.map(function(o,i){return '<button class="btn opt big" id="o'+i+'" onclick="choose('+i+')">'+pic(o.e)+'</button>'}).join('')+'</div>';
+ else if(q.mode==='pic')b='<div class="qpic">'+pic(it.e)+'</div>'+wordOpts();
+ else if(q.mode==='es2en')b='<div class="card" style="font-size:34px;font-weight:700;background:#fff8e1">🇪🇸 '+it.es+'</div>'+wordOpts();
+ else if(q.mode==='en2es'||q.mode==='listen2es')b=(q.mode==='en2es'?'<div style="font-size:44px;font-weight:700;margin:10px 0">'+it.w+' <button class="btn" style="padding:6px 14px" onclick="say(cq().it.w)">🔊</button></div>':'<button class="btn speak blue" onclick="say(cq().it.w)">🔊</button>')+'<div class="opts">'+q.opts.map(function(o,i){return '<button class="btn opt" style="font-size:22px" id="o'+i+'" onclick="choose('+i+')">'+o.es+'</button>'}).join('')+'</div>';
+ else if(q.mode==='def')b='<div class="card" style="font-size:26px;background:#fff8e1">'+it.d+' <button class="btn" style="padding:6px 14px" onclick="say(cq().it.d)">🔊</button></div>'+wordOpts();
+ else if(q.mode==='yesno')b='<div class="qpic">'+pic(it.e)+'</div><div style="font-size:42px;font-weight:700">'+q.shown+'</div><div class="opts"><button class="btn opt green" onclick="yn(true)">✔ Yes</button><button class="btn opt red" onclick="yn(false)">✘ No</button></div>';
+ else if(q.mode==='spell')b=(it.e?'<div class="qpic">'+pic(it.e)+'</div>':'<div class="card" style="font-size:24px;background:#fff8e1">'+(it.d||('🇪🇸 '+it.es))+'</div>')+'<button class="btn" onclick="say(cq().it.w)">🔊 Oír</button><div class="slot" id="slot"></div><div class="tiles" id="tiles"></div><button class="btn" onclick="spellBack()">⌫ Borrar</button>';
+ else if(q.mode==='gram')b='<div class="card" style="font-size:30px;background:#e8eaf6">'+it.q.replace('___','<span style="display:inline-block;min-width:80px;border-bottom:4px solid #ff9800">&nbsp;</span>')+'</div><div class="opts">'+q.opts.map(function(o,i){return '<button class="btn opt" id="o'+i+'" onclick="choose('+i+')">'+o+'</button>'}).join('')+'</div>';
+ else if(q.mode==='gtf')b='<div class="card" style="font-size:30px;background:#e8eaf6">'+q.shown+'</div><div class="opts"><button class="btn opt green" onclick="yn(true)">✔ Está bien</button><button class="btn opt red" onclick="yn(false)">✘ Está mal</button></div>';
+ else if(q.mode==='order')b='<p class="muted big">Toca las palabras en orden</p><div class="slot" id="wslot" style="font-size:28px;letter-spacing:0"></div><div class="tiles" id="wtiles"></div><button class="btn" onclick="wBack()">⌫ Borrar</button>';
+ else if(q.mode==='trans')b='<div class="card" style="font-size:28px;background:#e8eaf6">'+it.src+'</div><p class="big" style="color:#3f51b5;font-weight:700">👉 '+it.ins+'</p><div class="slot" id="wslot" style="font-size:28px;letter-spacing:0"></div><div class="tiles" id="wtiles"></div><button class="btn" onclick="wBack()">⌫ Borrar</button>';
+ if(SES.kind==='gram'||SES.kind==='gmix')top+='<div class="center" style="margin-bottom:8px"><button class="btn" style="font-size:16px;padding:8px 14px" onclick="topicHelp()">📖 Ver explicación</button></div>';
+ render(top+'<div class="card q pop"><h2>'+title+'</h2>'+b+'<div class="fb" id="fb"></div></div>');
+ if(q.mode==='order'||q.mode==='trans'){var tg=(q.mode==='order'?it.s:it.ans).split(' '),tl;var extra=q.mode==='trans'?it.dis:[];
+  do{tl=shuffle(tg.concat(extra))}while(tl.join(' ')===tg.join(' ')&&tg.length>1);
+  WT={target:tg,tiles:tl.map(function(w){return {w:w,used:false}}),built:[]};drawW()}
+ if(q.mode==='listen'||q.mode==='listen2es'||q.mode==='en2es')setTimeout(function(){say(it.w)},350);
+ if(q.mode==='spell'){var w=it.w.toLowerCase().split('');var t;do{t=shuffle(w.slice())}while(t.join('')===w.join('')&&new Set(w).size>1);SP={tiles:t.map(function(c){return {ch:c,used:false}}),built:[]};drawSpell()}
+}
+function drawSpell(){
+ $('#slot').innerHTML=SP.built.map(function(i){return SP.tiles[i].ch}).join('')||'&nbsp;';
+ $('#tiles').innerHTML=SP.tiles.map(function(t,i){return '<button class="btn tile'+(t.used?' used':'')+'" onclick="spellTap('+i+')">'+t.ch+'</button>'}).join('');
+}
+function spellTap(i){if(LOCK||SP.tiles[i].used)return;SP.tiles[i].used=true;SP.built.push(i);drawSpell();
+ if(SP.built.length===SP.tiles.length){var w=SP.built.map(function(i){return SP.tiles[i].ch}).join('');done(w===cq().it.w.toLowerCase())}}
+function spellBack(){if(LOCK)return;var i=SP.built.pop();if(i!=null)SP.tiles[i].used=false;drawSpell()}
+var WT=null;
+function drawW(){
+ $('#wslot').innerHTML=WT.built.map(function(i){return WT.tiles[i].w}).join(' ')||'&nbsp;';
+ $('#wtiles').innerHTML=WT.tiles.map(function(t,i){return '<button class="btn tile'+(t.used?' used':'')+'" style="width:auto;padding:0 14px;font-size:24px" onclick="wTap('+i+')">'+t.w+'</button>'}).join('');
+}
+function wTap(i){if(LOCK||WT.tiles[i].used)return;WT.tiles[i].used=true;WT.built.push(i);drawW();
+ if(WT.built.length===WT.target.length)done(WT.built.map(function(i){return WT.tiles[i].w}).join(' ')===WT.target.join(' '))}
+function wBack(){if(LOCK)return;var i=WT.built.pop();if(i!=null)WT.tiles[i].used=false;drawW()}
+function topicHelp(){var t=cq().it.topic;if(!t)return;var d=document.createElement('div');d.id='help';
+ d.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:9;overflow:auto;padding:16px';
+ d.innerHTML='<div class="card" style="max-width:800px;margin:20px auto">'+explain(t)+'<div class="center"><button class="btn primary" onclick="document.body.removeChild(document.getElementById(\'help\'))">Volver al ejercicio ▶</button></div></div>';
+ document.body.appendChild(d)}
+function choose(i){if(LOCK)return;var q=cq(),ok=i===q.ans;
+ var b=$('#o'+i);if(b)b.className+=ok?' ok':' bad';var c=$('#o'+q.ans);if(c&&!ok)c.className+=' ok';done(ok)}
+function yn(v){if(LOCK)return;done(v===cq().truth)}
+function done(ok){
+ LOCK=true;var q=cq();record(q,ok);
+ var right=rightOf(q);
+ var fb=$('#fb');
+ if(ok){fb.innerHTML='<span style="color:#2e7d32">'+rnd(PRAISE)+'</span>';say(right);setTimeout(next,1300)}
+ else{fb.innerHTML='<span style="color:#c62828">¡Casi! Es: <b>'+right+'</b></span><br><button class="btn primary" onclick="next()" style="margin-top:10px">Siguiente ▶</button>';say(right)}
+}
+function record(q,ok){
+ var p=P(),id=q.it.id;
+ if(ok)SES.sc++;
+ if(SES.kind==='place'){if(ok&&q.it.kind==='word')p.m[id]=Math.max(mOf(p,id),2);save();return}
+ if(q.it.kind!=='word'){
+  var tp=q.it.topic;
+  if(SES.kind==='gdiag'&&ok)SES.per[tp.id]=(SES.per[tp.id]||0)+1;
+  if(ok){p.stars++;SES.stars=(SES.stars||0)+1}
+  else{if(!p.gw)p.gw={};p.gw[tp.id]=(p.gw[tp.id]||0)+1;SES.miss.push(q.it)}
+  var sk2=p.skill[q.mode]||[0,0];sk2[1]++;if(ok)sk2[0]++;p.skill[q.mode]=sk2;
+  var d2=today();p.days[d2]=(p.days[d2]||0)+1;
+  save();return;
+ }
+ var before=mOf(p,id);
+ if(ok&&q.it.lvl<p.level&&!(id in p.m)){p.m[id]=LEARN;p.stars++;SES.stars++;SES.learned.push(q.it);SES.express=(SES.express||0)+1}
+ else if(ok&&!(id in p.m)){p.m[id]=2;p.stars++;SES.stars++}
+ else if(ok){p.m[id]=Math.min(before+1,LEARN+2);p.stars++;SES.stars++;if(before<LEARN&&before+1>=LEARN)SES.learned.push(q.it)}
+ else{p.m[id]=Math.max(0,before-1);p.wrong[id]=(p.wrong[id]||0)+1;SES.miss.push(q.it)}
+ var sk=p.skill[q.mode]||[0,0];sk[1]++;if(ok)sk[0]++;p.skill[q.mode]=sk;
+ var d=today();p.days[d]=(p.days[d]||0)+1;
+ save();
+}
+function next(){LOCK=false;SES.i++;if(SES.i<SES.qs.length)return renderQ();
+ if(SES.kind==='place')return placeStageEnd();
+ if(SES.kind==='exam')return examEnd();
+ if(SES.kind==='gram'||SES.kind==='gmix')return gramEnd();
+ if(SES.kind==='gdiag')return diagEnd();
+ practiceEnd();}
+function quitSes(){if(HAS_TTS)speechSynthesis.cancel();var h=$('#help');if(h)document.body.removeChild(h);
+ if(SES&&SES.kind==='place')return home();
+ if(SES&&SES.kind==='gram')return topic(SES.tid);
+ if(SES&&(SES.kind==='gmix'||SES.kind==='gdiag'))return grammarHome();
+ map()}
+
+/* ============ PRACTICE ============ */
+function pickItems(pool,n){
+ var p=P();
+ var sc=pool.map(function(it){var m=mOf(p,it.id),s=Math.random()*3;if(m>=LEARN)s+=10;else s-=m*1.5;s-=Math.min(p.wrong[it.id]||0,3);return [s,it]});
+ sc.sort(function(a,b){return a[0]-b[0]});
+ var out=sc.slice(0,n).map(function(x){return x[1]});
+ var i=0;while(out.length<n&&pool.length){out.push(out[i%Math.max(1,Math.min(out.length,pool.length))]);i++}
+ return shuffle(out);
+}
+function practice(unitId){
+ var p=P(),L=LEVELS[p.level],U=null;
+ if(unitId){for(var li=0;li<LEVELS.length;li++)LEVELS[li].units.forEach(function(u){if(u.id===unitId)U=u})}
+ var items;
+ if(U)items=pickItems(U.items,SESSION);
+ else{var rv=revItems(p,p.level).filter(function(it){return !learned(p,it)});
+  var nr=Math.min(rv.length,REVIEW_MIX);
+  var cu=L.items.filter(function(it){return !learned(p,it)}).length?L.items:L.items.concat(rv);
+  items=pickItems(cu,SESSION-nr).concat(nr?pickItems(rv,nr):[]);
+  items=shuffle(items);}
+ SES={kind:'practice',unitId:unitId,qs:items.map(function(it){return makeQ(it)}),i:0,sc:0,stars:0,learned:[],miss:[]};
+ renderQ();
+}
+function practiceEnd(){
+ var p=P(),n=SES.qs.length,before=p.stars-SES.stars;
+ var nb=Math.floor(before/STICKER_EVERY),na=Math.floor(p.stars/STICKER_EVERY);
+ var newSt=na>nb&&na<=STICKERS.length?STICKERS[na-1]:'';
+ p.history.push({d:today(),t:'practica',sc:SES.sc,n:n});if(p.history.length>200)p.history.shift();save();
+ REG=[];
+ render(header()+'<div class="card center pop"><div style="font-size:72px">'+(SES.sc>=n*0.8?'🏆':SES.sc>=n/2?'🌟':'💪')+'</div><h1>'+SES.sc+' de '+n+' bien</h1><p class="big">+'+SES.stars+' ⭐</p>'+
+ (SES.learned.length?'<p class="big">¡Palabras aprendidas! 🟩</p><div class="words" style="justify-content:center">'+SES.learned.map(function(it){var s=it.kind==='gram'?it.q.replace('___',it.a):it.w;return '<button class="wchip l" onclick="sayReg('+reg(s)+')">'+s+'</button>'}).join('')+'</div>':'')+
+ (newSt?'<p class="big">¡Sticker nuevo! <span style="font-size:64px">'+newSt+'</span></p>':'')+
+ '<div class="row" style="margin-top:16px"><button class="btn primary" onclick="practice('+(SES.unitId?'\''+SES.unitId+'\'':'')+')">🔁 Otra vez</button><button class="btn" onclick="map()">🗺️ Mapa</button></div></div>');
+}
+
+/* ============ PLACEMENT ============ */
+function placementIntro(){
+ var k=kid();
+ render('<div class="top"><button class="btn" onclick="home()">🏠</button></div><div class="card center pop"><div style="font-size:80px">'+k.av+'</div><h1>¡Hola, '+esc(k.name)+'!</h1><p class="big">Vamos a hacer una <b>prueba</b> para saber cuánto inglés sabes.</p><p class="big">Si fallas no pasa nada 😊 Solo sirve para saber por dónde empezar.</p><button class="btn primary" style="font-size:26px;margin-top:10px" onclick="startPlacement()">¡Empezar! 🚀</button></div>');
+}
+function placeQs(li){var L=LEVELS[li];
+ var w=shuffle(L.items.filter(function(x){return x.kind==='word'})).slice(0,6);
+ var g=shuffle(topicsOf(li).map(function(t){return rnd(t.mc)})).slice(0,2);
+ return shuffle(w.concat(g)).map(function(it){return makeQ(it,null,true)});}
+function startPlacement(){SES={kind:'place',stage:0,res:[],qs:placeQs(0),i:0,sc:0};renderQ()}
+function placeStageEnd(){
+ var p=P(),li=SES.stage;SES.res[li]=SES.sc;
+ if(SES.sc>=6&&li<2){
+  SES.stage++;SES.qs=placeQs(SES.stage);SES.i=0;SES.sc=0;
+  return render('<div class="card center pop"><div style="font-size:72px">🌟</div><h1>¡Genial!</h1><p class="big">Sabes mucho de '+LEVELS[li].name+'. Ahora un poco más difícil: '+LEVELS[li+1].icon+' '+LEVELS[li+1].name+'</p><button class="btn primary" onclick="renderQ()">Seguir ▶</button></div>');
+ }
+ var lvl=SES.sc>=6?2:li;
+ for(var i=0;i<lvl;i++)if(p.exams.indexOf(i)<0)p.exams.push(i);
+ p.level=lvl;p.placed=true;p.history.push({d:today(),t:'prueba inicial',res:SES.res.slice()});save();
+ var L=LEVELS[lvl];
+ render('<div class="card center pop"><div style="font-size:80px">'+L.icon+'</div><h1>¡Empiezas en '+L.name+'!</h1><p class="big">Ahora verás tus islas y todo lo que tienes que aprender para pasar al siguiente nivel.</p><button class="btn primary" style="font-size:26px" onclick="map()">¡Vamos! 🗺️</button></div>');
+}
+
+/* ============ EXAM ============ */
+function examIntro(){var p=P(),L=LEVELS[p.level];
+ render(header()+'<div class="card center pop"><div style="font-size:72px">🏆</div><h1>Examen de '+L.name+'</h1><p class="big">15 preguntas como en el examen de Cambridge: escuchar, leer, escribir y gramática.</p><p class="big">Necesitas <b>'+EXAM_PASS+'</b> bien para pasar. ¡Tú puedes!</p><div class="row"><button class="btn green" style="font-size:26px" onclick="startExam()">Empezar ▶</button><button class="btn" onclick="map()">Ahora no</button></div></div>')}
+function startExam(){
+ var p=P(),L=LEVELS[p.level];
+ var words=shuffle(L.items.filter(function(x){return x.kind==='word'}));
+ var gr=shuffle(topicsOf(p.level).map(function(t){return rnd(t.mc)})).slice(0,4);
+ var plan=HAS_TTS?['listen','listen','listen2es','listen2es','spell','spell','spell','pic','es2en','en2es','yesno']:['pic','pic','es2en','es2en','en2es','spell','spell','spell','yesno','def','en2es'];
+ var qs=[];
+ plan.forEach(function(mode){
+  for(var k=0;k<words.length;k++){if(modesFor(words[k]).indexOf(mode)>=0){qs.push(makeQ(words.splice(k,1)[0],mode));return}}
+  var it=words.shift();if(it)qs.push(makeQ(it,null,true));
+ });
+ gr.forEach(function(g){qs.push(makeQ(g))});
+ SES={kind:'exam',qs:shuffle(qs),i:0,sc:0,stars:0,learned:[],miss:[]};renderQ();
+}
+function examEnd(){
+ var p=P(),li=p.level,n=SES.qs.length,pass=SES.sc>=EXAM_PASS;REG=[];
+ p.history.push({d:today(),t:'examen '+LEVELS[li].name,sc:SES.sc,n:n,pass:pass});
+ var html;
+ if(pass){
+  if(p.exams.indexOf(li)<0)p.exams.push(li);
+  if(li<2){p.level=li+1;html='<div style="font-size:90px">🎉</div><h1>¡Has aprobado '+LEVELS[li].name+'!</h1><p class="big">'+SES.sc+' de '+n+'. ¡Subes a '+LEVELS[li+1].icon+' <b>'+LEVELS[li+1].name+'</b>!</p>'}
+  else{p.done=true;html='<div style="font-size:90px">🏆</div><h1>¡Campeón/a de Flyers!</h1><p class="big">'+SES.sc+' de '+n+'. ¡Has terminado todos los niveles!</p>'}
+ } else {
+  html='<div style="font-size:72px">💪</div><h1>'+SES.sc+' de '+n+'</h1><p class="big">¡Casi! Necesitas '+EXAM_PASS+'. Repasa estas y vuelve a intentarlo:</p><div class="words" style="justify-content:center">'+
+   SES.miss.map(function(it){var s=it.kind==='gram'?it.q.replace('___',it.a):it.w;return '<button class="wchip p" onclick="sayReg('+reg(s)+')">'+s+'</button>'}).join('')+'</div>';
+ }
+ save();
+ render(header()+'<div class="card center pop">'+html+'<div class="row" style="margin-top:16px"><button class="btn primary" onclick="map()">🗺️ Ir al mapa</button></div></div>');
+}
+
+/* ============ GRAMMAR SCREENS ============ */
+var EGC={'+':['#e8f5e9','#2e7d32'],'−':['#ffebee','#c62828'],'?':['#e3f2fd','#1565c0']};
+function explain(t){
+ return '<h2>'+t.icon+' '+t.name+'</h2><div style="font-size:20px;line-height:1.5">'+t.ex+'</div><div style="margin-top:12px">'+
+  t.eg.map(function(e){var c=EGC[e[0]]||EGC['+'];return '<div style="background:'+c[0]+';border-left:6px solid '+c[1]+';border-radius:12px;padding:10px 12px;margin:8px 0;display:flex;align-items:center;gap:10px"><button class="btn" style="padding:6px 12px" onclick="sayReg('+reg(e[1])+')">🔊</button><div><div style="font-size:22px;font-weight:700;color:'+c[1]+'">'+e[1]+'</div><div class="muted">'+e[2]+'</div></div></div>'}).join('')+'</div>';
+}
+function grammarHome(){
+ REG=[];var p=P();
+ var pend=GLIST.filter(function(t){return pendingT(p,t)});
+ var h=header()+'<div class="card"><button class="btn" onclick="map()">⬅ Mapa</button><h2 style="margin-top:12px">📘 Gramática</h2>'+
+  '<p class="big">Cada tema tiene 3 medallas: 🥉 Elige · 🥈 Ordena · 🥇 Transforma. Para el examen de tu nivel necesitas 🥈 en todos sus temas.</p>'+
+  '<div class="row"><button class="btn primary" onclick="gramMix()">🔀 Repaso mixto</button></div></div>';
+ if(pend.length)h+='<div class="card" style="background:#fff8e1"><h3>📌 Repaso pendiente</h3><p class="muted">Temas que todavía no dominas. ¡Empieza por aquí!</p><div class="words">'+
+  pend.map(function(t){return '<button class="wchip p" onclick="topic(\''+t.id+'\')">'+t.icon+' '+t.name+' <span class="muted">('+LEVELS[t.lvl].name+')</span></button>'}).join('')+'</div></div>';
+ LEVELS.forEach(function(L,li){var ts=topicsOf(li);
+  h+='<div class="card"><h3>'+L.icon+' '+L.name+' <span class="muted" style="font-size:16px">'+gramDone(p,li)+'/'+ts.length+' con 🥈</span></h3>'+
+   (li<p.level?'<p class="muted">🔁 Repaso: si sacas 8 de 8 en el ejercicio 1, ¡ganas 🥈 directamente!</p>':'')+
+   '<div class="islands">'+ts.map(function(t,i){var g=gOf(p,t.id);
+    return '<button class="btn island" onclick="topic(\''+t.id+'\')"><span class="ic">'+t.icon+'</span><span class="nm">'+(i+1)+'. '+t.name+'</span><span style="font-size:22px">'+medalStr(g.medal)+'</span>'+
+     (pendingT(p,t)?'<span style="display:block;font-size:14px;color:#e65100;margin-top:4px">📌 Repasar</span>':(g.diag===2&&g.medal<2?'<span style="display:block;font-size:14px;color:#2e7d32;margin-top:4px">✅ Lo sabes</span>':''))+'</button>'}).join('')+
+   '</div></div>';
+ });
+ render(h);
+}
+function topic(tid){
+ REG=[];var p=P(),t=GT[tid],m=gOf(p,tid).medal;
+ function sb(st,label,desc){var open=m>=st-1;
+  return '<button class="btn" style="width:100%;text-align:left;margin:6px 0;'+(open?'':'opacity:.5')+'" onclick="'+(open?'gramStage(\''+tid+'\','+st+')':'')+'"><span style="font-size:24px">'+(m>=st?MED[st]:(open?'▶':'🔒'))+' '+label+'</span><br><span class="muted" style="font-size:16px;font-weight:400">'+desc+'</span></button>'}
+ render(header()+'<div class="card"><button class="btn" onclick="grammarHome()">⬅ Gramática</button><div style="margin-top:12px">'+explain(t)+'</div></div>'+
+  '<div class="card"><h3>Ejercicios '+medalStr(m)+'</h3>'+
+  sb(1,'1. Elige la correcta','Elige la palabra que falta y di si la frase está bien o mal. Gana 🥉 con '+STAGE_NEED[1]+' de '+STAGE_N[1]+'.')+
+  sb(2,'2. Ordena la frase','Construye frases con fichas. Gana 🥈 con '+STAGE_NEED[2]+' de '+STAGE_N[2]+'.')+
+  sb(3,'3. Transforma','Cambia frases: pregunta, negativa, pasado… Gana 🥇 con '+STAGE_NEED[3]+' de '+STAGE_N[3]+'.')+
+  '</div>');
+}
+function gramStage(tid,st){
+ var t=GT[tid],qs;
+ if(st===1)qs=fill(t.mc,8).map(function(it,i){return makeQ(it,i%2?'gtf':'gram')});
+ else if(st===2)qs=fill(t.or,4).map(function(it){return makeQ(it)}).concat(fill(t.mc,2).map(function(it){return makeQ(it,'gtf')}));
+ else{var main=t.tr.length?fill(t.tr,Math.min(4,t.tr.length*2)):[];main=main.concat(fill(t.or,6-main.length));
+  qs=main.map(function(it){return makeQ(it)}).concat(fill(t.mc,2).map(function(it){return makeQ(it,'gram')}))}
+ SES={kind:'gram',tid:tid,stage:st,qs:shuffle(qs),i:0,sc:0,stars:0,learned:[],miss:[]};renderQ();
+}
+function gramMix(){
+ var p=P(),ts=GLIST.filter(function(t){return gOf(p,t.id).medal>=1});
+ if(!ts.length)ts=topicsOf(p.level);
+ var pool=[];ts.forEach(function(t){pool=pool.concat(t.mc,t.or)});
+ var qs=fill(pool,10).map(function(it){return it.kind==='gram'?makeQ(it,Math.random()<.5?'gram':'gtf'):makeQ(it)});
+ SES={kind:'gmix',qs:qs,i:0,sc:0,stars:0,learned:[],miss:[]};renderQ();
+}
+function missChips(){var seen={};return SES.miss.filter(function(it){var r=rightOf({it:it});if(seen[r])return false;seen[r]=1;return true}).map(function(it){var r=rightOf({it:it});return '<button class="wchip p" onclick="sayReg('+reg(r)+')">'+r+'</button>'}).join('')}
+function gramEnd(){
+ REG=[];var p=P(),n=SES.qs.length,h,btns;
+ if(SES.kind==='gram'){
+  var g=gOf(p,SES.tid),st=SES.stage,pass=SES.sc>=STAGE_NEED[st],newM=pass&&g.medal<st;
+  var shortcut=st===1&&SES.sc===n&&GT[SES.tid].lvl<p.level&&g.medal<2;
+  if(newM)g.medal=st;
+  if(shortcut){g.medal=2;newM=false}
+  h='<div style="font-size:80px">'+(pass?MED[st]:'💪')+'</div><h1>'+SES.sc+' de '+n+' bien</h1>'+
+   (shortcut?'<p class="big">⚡ ¡Atajo! ¡'+n+' de '+n+'! Este tema de repaso ya lo dominas: ganas 🥉 y 🥈 de golpe.</p>':'')+
+   (newM?'<p class="big">¡Has ganado la medalla '+MED[st]+' en <b>'+GT[SES.tid].name+'</b>!</p>':(shortcut?'':pass?'<p class="big">¡Muy bien! Ya tenías esta medalla.</p>':'<p class="big">Necesitas '+STAGE_NEED[st]+' para la medalla '+MED[st]+'. ¡Otra vez!</p>'));
+  btns='<button class="btn primary" onclick="gramStage(\''+SES.tid+'\','+st+')">🔁 Otra vez</button>'+
+   (pass&&st<3?'<button class="btn green" onclick="gramStage(\''+SES.tid+'\','+(st+1)+')">Siguiente ejercicio ▶</button>':'')+
+   '<button class="btn" onclick="topic(\''+SES.tid+'\')">📖 Volver al tema</button>';
+ } else {
+  h='<div style="font-size:72px">'+(SES.sc>=n*0.8?'🏆':'🌟')+'</div><h1>'+SES.sc+' de '+n+' bien</h1>';
+  btns='<button class="btn primary" onclick="gramMix()">🔁 Otra vez</button><button class="btn" onclick="grammarHome()">📘 Gramática</button>';
+ }
+ if(SES.miss.length)h+='<p class="big">Repasa estas frases:</p><div class="words" style="justify-content:center">'+missChips()+'</div>';
+ h+='<p class="big">+'+SES.stars+' ⭐</p>';
+ p.history.push({d:today(),t:SES.kind==='gram'?'gramática: '+GT[SES.tid].name+' ('+SES.stage+')':'gramática: repaso mixto',sc:SES.sc,n:n});
+ save();
+ render(header()+'<div class="card center pop">'+h+'<div class="row" style="margin-top:12px">'+btns+'</div></div>');
+}
+function gramDiag(li){
+ var qs=[];topicsOf(li).forEach(function(t){fill(t.mc,2).forEach(function(it){qs.push(makeQ(it,'gram'))})});
+ render(header()+'<div class="card center pop"><div style="font-size:70px">🔎</div><h1>Prueba de gramática '+LEVELS[li].name+'</h1><p class="big">'+qs.length+' preguntas, 2 de cada tema. Así sabremos qué temas ya sabes y cuáles tienes que repasar.</p><p class="big">Si no lo sabes, ¡no pasa nada! 😊</p><div class="row"><button class="btn primary" id="gd">Empezar ▶</button><button class="btn" onclick="grammarHome()">Ahora no</button></div></div>');
+ $('#gd').onclick=function(){SES={kind:'gdiag',li:li,qs:qs,i:0,sc:0,stars:0,learned:[],miss:[],per:{}};renderQ()};
+}
+function diagEnd(){
+ REG=[];var p=P(),li=SES.li,ok=[],bad=[];
+ topicsOf(li).forEach(function(t){var s=SES.per[t.id]||0,g=gOf(p,t.id);g.diag=s;if(s===2){if(g.medal<1)g.medal=1;ok.push(t)}else bad.push(t)});
+ p.history.push({d:today(),t:'prueba gramática '+LEVELS[li].name,sc:SES.sc,n:SES.qs.length});save();
+ function chips(a,c){return a.map(function(t){return '<button class="wchip '+c+'" onclick="topic(\''+t.id+'\')">'+t.icon+' '+t.name+'</button>'}).join('')}
+ render(header()+'<div class="card pop"><h1 class="center">🔎 Resultado: '+SES.sc+' de '+SES.qs.length+'</h1>'+
+  (ok.length?'<h3>✅ Ya lo sabes ('+ok.length+') — tienes 🥉, ¡a por la 🥈!</h3><div class="words">'+chips(ok,'l')+'</div>':'')+
+  (bad.length?'<h3 style="margin-top:14px">📌 Tienes que repasar ('+bad.length+')</h3><div class="words">'+chips(bad,'p')+'</div>':'')+
+  '<div class="row" style="margin-top:16px"><button class="btn primary" onclick="grammarHome()">📘 Ir a Gramática</button></div></div>');
+}
+
+/* ============ PARENTS ============ */
+var GATE=null,GATE_NEXT='parents';
+function parentGate(nx){GATE_NEXT=nx||'parents';var a=6+Math.floor(Math.random()*4),b=6+Math.floor(Math.random()*4);GATE=a*b;
+ render('<div class="top"><button class="btn" onclick="home()">🏠</button></div><div class="card center"><h2>🔐 Zona de adultos</h2><p class="big">¿Cuánto es '+a+' × '+b+'?</p><input id="gate" type="number" inputmode="numeric"> <button class="btn primary" onclick="checkGate()">Entrar</button><p id="gerr" style="color:#c62828"></p></div>')}
+function checkGate(){if(+$('#gate').value===GATE){if(GATE_NEXT==='add')addStudent('home');else parents()}else $('#gerr').textContent='Respuesta incorrecta'}
+function parents(only){
+ var html='<div class="top"><button class="btn" onclick="home()">🏠</button><h2>🔐 Zona de adultos</h2><button class="btn primary" onclick="addStudent(\'parents\')">➕ Añadir alumno</button></div>';
+ html+='<div class="card"><h3>Resumen de alumnos ('+KIDS.length+')</h3>'+(KIDS.length?'<div style="overflow-x:auto"><table><tr><th>Alumno</th><th>Nivel</th><th>📚 Palabras</th><th>📘 Gramática</th><th>🔁 Repaso</th><th>⭐</th><th>Último día</th><th></th></tr>'+
+  KIDS.map(function(k){var p=S.p[k.id],L=LEVELS[p.level],pr=prog(p,L.items),gt=topicsOf(p.level).length;
+   var rv=p.level?Math.round(revItems(p,p.level).filter(function(it){return learned(p,it)}).length/revItems(p,p.level).length*100)+'%':'—';
+   var ds=Object.keys(p.days).sort();var last=ds.length?ds[ds.length-1]:'—';
+   return '<tr><td>'+k.av+' '+esc(k.name)+'</td><td>'+L.name+(p.done?' 🏆':'')+'</td><td>'+Math.round(pr.pct*100)+'%</td><td>'+gramDone(p,p.level)+'/'+gt+'</td><td>'+rv+'</td><td>'+p.stars+'</td><td>'+last+'</td><td><button class="btn" style="font-size:15px;padding:6px 12px" onclick="parents(\''+k.id+'\')">Ver</button></td></tr>'}).join('')+'</table></div>':'<p class="muted">Todavía no hay alumnos.</p>')+'</div>';
+ KIDS.forEach(function(k){if(only!==k.id)return;
+  var p=S.p[k.id],L=LEVELS[p.level],pr=prog(p,L.items);
+  var weak=Object.keys(p.wrong).filter(function(id){return ITEMS[id]&&!learned(p,ITEMS[id])}).sort(function(a,b){return p.wrong[b]-p.wrong[a]}).slice(0,12);
+  var days=[];for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);var key=fmt(d);days.push('<td class="center">'+['D','L','M','X','J','V','S'][d.getDay()]+'<br><b>'+(p.days[key]||0)+'</b></td>')}
+  var tot=0;Object.keys(p.days).forEach(function(d){tot+=p.days[d]});
+  html+='<div class="card" id="det"><h2>'+k.av+' '+esc(k.name)+'</h2>'+
+  (p.placed?'<p class="big">'+L.icon+' <b>'+L.name+'</b> · '+Math.round(pr.pct*100)+'% aprendido ('+pr.l+'/'+pr.t+')'+(p.done?' · 🏆 Flyers superado':'')+'</p>'+bar(pr.pct):'<p class="big">Prueba inicial pendiente</p>')+
+  '<p>⭐ '+p.stars+' estrellas · 🔥 racha '+streak(p)+' días · '+tot+' preguntas en total</p>'+
+  '<h3>Últimos 7 días (preguntas)</h3><table><tr>'+days.join('')+'</tr></table>'+
+  '<h3>Acierto por destreza</h3><table>'+Object.keys(SKILL).map(function(s){var v=p.skill[s];return '<tr><td>'+SKILL[s]+'</td><td>'+(v?Math.round(v[0]/v[1]*100)+'% ('+v[1]+')':'—')+'</td></tr>'}).join('')+'</table>'+
+  (p.level>0?'<p><b>🔁 Repaso vocabulario:</b> '+LEVELS.slice(0,p.level).map(function(l){return l.name+' '+Math.round(prog(p,l.items).pct*100)+'%'}).join(' · ')+' (necesita 85%)</p>':'')+
+  '<h3>Gramática</h3><table>'+LEVELS.map(function(l,li){var ts=topicsOf(li);return '<tr><td>'+l.icon+' '+l.name+'</td><td>'+ts.map(function(t){return '<span title="'+t.name+'">'+MED[gOf(p,t.id).medal]+'</span>'}).join(' ')+'</td><td>'+gramDone(p,li)+'/'+ts.length+' 🥈</td></tr>'}).join('')+'</table>'+
+  (function(){var pd=GLIST.filter(function(t){return pendingT(p,t)});return '<p><b>📌 Repaso pendiente:</b> '+(pd.length?pd.map(function(t){return t.name+' ('+LEVELS[t.lvl].name+')'}).join(', '):'ninguno')+'</p>'})()+
+  (function(){var gw=p.gw||{},ks=Object.keys(gw).filter(function(k){return GT[k]}).sort(function(a,b){return gw[b]-gw[a]}).slice(0,6);return '<p><b>Temas con más fallos:</b> '+(ks.length?ks.map(function(k){return GT[k].name+' ×'+gw[k]}).join(', '):'—')+'</p>'})()+
+  '<h3>Palabras que más falla</h3><div class="words">'+(weak.length?weak.map(function(id){var it=ITEMS[id];return '<span class="wchip p">'+(it.kind==='gram'?it.q.replace('___',it.a):it.w)+' ×'+p.wrong[id]+'</span>'}).join(''):'<span class="muted">Ninguna todavía</span>')+'</div>'+
+  '<h3>Historial</h3><div class="muted" style="font-size:15px">'+(p.history.slice(-8).reverse().map(function(h){return h.d+' · '+h.t+(h.n?' · '+h.sc+'/'+h.n:'')+(h.res?' · aciertos por nivel: '+h.res.join(' / ')+' de 8':'')+(h.pass===true?' ✅':h.pass===false?' ❌':'')}).join('<br>')||'—')+'</div>'+
+  '<h3>Ajustes</h3><p class="muted">Nivel actual: '+L.name+'</p><div class="row" style="justify-content:flex-start">'+LEVELS.map(function(l,i){return '<button class="btn" style="font-size:16px" onclick="setLevel(\''+k.id+'\','+i+')">Poner en '+l.name+'</button>'}).join('')+
+  '<button class="btn red" style="font-size:16px" onclick="resetKid(\''+k.id+'\')">Borrar progreso</button><button class="btn" style="font-size:16px" onclick="renameKid(\''+k.id+'\')">✏️ Cambiar nombre</button><button class="btn red" style="font-size:16px" onclick="deleteKid(\''+k.id+'\')">🗑️ Eliminar alumno</button></div></div>';
+ });
+ html+='<p class="muted center">El progreso se guarda en este navegador de este dispositivo. No borres los datos del navegador.</p>';
+ render(html);if(only){var c=document.getElementById('det');if(c)c.scrollIntoView()}
+}
+function setLevel(id,li){var p=S.p[id];p.level=li;p.placed=true;p.done=false;save();parents(id)}
+function renameKid(id){var k=KIDS.filter(function(x){return x.id===id})[0];var n=prompt('Nuevo nombre',k.name);if(n&&n.trim()){k.name=n.trim();save()}parents(id)}
+function deleteKid(id){if(!confirm('¿Eliminar este alumno y todo su progreso?'))return;for(var i=0;i<KIDS.length;i++)if(KIDS[i].id===id){KIDS.splice(i,1);break}delete S.p[id];save();parents()}
+function resetKid(id){if(confirm('¿Seguro? Se borrará todo el progreso de este alumno.')){var k=KIDS.filter(function(x){return x.id===id})[0];S.p[id]=newProfile(k.lvl);save();parents(id)}}
+
+home();
+</script>
+</body>
+</html>
